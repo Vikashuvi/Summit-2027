@@ -1,0 +1,103 @@
+@import "tailwindcss";
+
+@theme {
+    --color-primary: #1038A5;
+    --color-secondary: #ffffff;
+    --color-milk: #faeade;
+    --color-light-brown: #e3a458;
+    --font-serif: "Playfair Display", serif;
+    --font-sans: "Inter", sans-serif;
+}
+
+:root {
+    --background: #ffffff;
+    --foreground: #1038A5;
+    --accent: #1038A5;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-sans);
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    scroll-behavior: smooth;
+}
+
+::selection {
+    background: #1038A5;
+    color: white;
+}
+
+h1,
+h2,
+h3 {
+    font-family: var(--font-serif);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: -0.02em;
+}
+
+.glass-card {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+}
+
+.gradient-text {
+    background: linear-gradient(135deg, #1038A5 0%, #001A6E 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.btn-primary {
+    background: #1038A5;
+    color: white;
+    padding: 1rem 2.5rem;
+    border-radius: 50px;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    overflow: hidden;
+    position: relative;
+}
+
+.btn-primary::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: 0.5s;
+}
+
+.btn-primary:hover::before {
+    left: 100%;
+}
+
+.testimonials-section {
+    @apply bg-milk relative w-full h-[120dvh];
+}
+
+.testimonials-section .pin-box {
+    @apply flex items-center justify-center w-full ps-52 absolute 2xl:bottom-32 bottom-[50vh];
+}
+
+.testimonials-section .pin-box .vd-card {
+    @apply md:w-96 w-80 flex-none md:rounded-[2vw] rounded-3xl -ms-44 overflow-hidden 2xl:relative absolute border-[.5vw] border-milk;
+}
+
+.testimonials-section h1 {
+    @apply uppercase text-[20.5vw] leading-[105%] tracking-[-.4vw] ml-[2vw] font-bold;
+}
