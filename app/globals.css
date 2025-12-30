@@ -87,15 +87,15 @@ h3 {
 }
 
 .testimonials-section {
-    @apply bg-milk relative w-full h-[120dvh];
+    @apply bg-white relative w-full min-h-screen;
 }
 
 .testimonials-section .pin-box {
-    @apply flex items-center justify-center w-full ps-52 absolute 2xl:bottom-32 bottom-[50vh];
+    @apply flex items-center justify-center w-full ps-16 absolute top-1/2 -translate-y-1/2;
 }
 
 .testimonials-section .pin-box .vd-card {
-    @apply md:w-96 w-80 flex-none md:rounded-[2vw] rounded-3xl -ms-44 overflow-hidden 2xl:relative absolute border-[.5vw] border-milk;
+    @apply md:w-72 w-60 flex-none md:rounded-[2vw] rounded-3xl -ms-20 overflow-hidden relative border-[.5vw] border-milk;
 }
 
 .testimonials-section h1 {
