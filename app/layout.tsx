@@ -17,6 +17,12 @@ export const metadata: Metadata = {
     description: "Join the most exclusive summit for the elite in 2027. Grandeur, Elegance, and Collaboration.",
 };
 
+export const viewport = {
+    width: 'device-width',
+    initialScale: 1,
+    maximumScale: 1,
+};
+
 export default function RootLayout({
     children,
 }: Readonly<{

@@ -11,7 +11,7 @@ const cards = [
     {
         src: "/videos/f1.mp4",
         rotation: "rotate-[-10deg]",
-        translation: "translate-y-[-5%]",
+        translation: "",
     },
     {
         src: "/videos/f2.mp4",
@@ -21,12 +21,12 @@ const cards = [
     {
         src: "/videos/f3.mp4",
         rotation: "rotate-[-4deg]",
-        translation: "translate-y-[-5%]",
+        translation: "",
     },
     {
         src: "/videos/f4.mp4",
         rotation: "rotate-[4deg]",
-        translation: "translate-y-[5%]",
+        translation: "",
     },
     {
         src: "/videos/f5.mp4",
@@ -36,12 +36,12 @@ const cards = [
     {
         src: "/videos/f6.mp4",
         rotation: "rotate-[4deg]",
-        translation: "translate-y-[5%]",
+        translation: "",
     },
     {
         src: "/videos/f7.mp4",
         rotation: "rotate-[-3deg]",
-        translation: "translate-y-[10%]",
+        translation: "",
     },
 ] as const;
 
@@ -93,12 +93,13 @@ export default function TestimonialSection() {
     };
 
     return (
-        <section ref={sectionRef} className="testimonials-section relative overflow-hidden">
-            <div className="absolute top-12 left-1/2 -translate-x-1/2 z-20 text-center w-full px-4">
-                <h2 className="text-5xl md:text-6xl font-bold text-primary mb-3 uppercase tracking-tight">
-                    Industry-Leading <span className="text-light-brown">Speakers</span>
+        <section ref={sectionRef} className="testimonials-section relative overflow-hidden bg-white">
+            <div className="absolute top-16 left-1/2 -translate-x-1/2 z-20 w-full px-6 flex flex-col items-center justify-center text-center">
+                <h2 className="text-4xl md:text-5xl font-bold text-primary mb-4 uppercase tracking-tighter leading-none">
+                    Industry-Leading <br />
+                    <span className="text-light-brown">Speakers</span>
                 </h2>
-                <p className="text-lg text-primary/60 max-w-xl mx-auto font-medium">
+                <p className="text-sm text-primary/60 max-w-lg mx-auto font-medium">
                     Learn from world-class executives who have shaped the future
                 </p>
             </div>
@@ -110,6 +111,7 @@ export default function TestimonialSection() {
                         className={`vd-card ${card.translation} ${card.rotation}`}
                         onMouseEnter={() => handlePlay(index)}
                         onMouseLeave={() => handlePause(index)}
+                        style={{ marginTop: "10%" }}
                     >
                         <video
                             ref={(el) => {

@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import "tw-animate-css";
 
 @theme {
     --color-primary: #1038A5;
@@ -7,97 +8,80 @@
     --color-light-brown: #e3a458;
     --font-serif: "Playfair Display", serif;
     --font-sans: "Inter", sans-serif;
+
+    /* Root variables translated to theme tokens */
+    --color-accent: oklch(0.97 0 0);
+    --radius-base: 0.625rem;
+    --color-bg-main: oklch(1 0 0);
+    --color-fg-main: oklch(0.145 0 0);
 }
 
-:root {
-    --background: #ffffff;
-    --foreground: #1038A5;
-    --accent: #1038A5;
+/* Base Styles */
+@layer base {
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        @apply border-gray-200/10;
+    }
+
+    body {
+        font-family: var(--font-sans);
+        @apply bg-white text-primary overflow-x-hidden antialiased;
+        scroll-behavior: smooth;
+    }
+
+    h1,
+    h2,
+    h3 {
+        font-family: var(--font-serif);
+        @apply font-bold uppercase tracking-tight;
+    }
+
+    ::selection {
+        @apply bg-primary text-white;
+    }
 }
 
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+/* Custom Component Classes */
+@layer components {
+    .glass-card {
+        @apply bg-white/5 backdrop-blur-[10px] border border-white/10 rounded-[20px];
+    }
+
+    .gradient-text {
+        @apply bg-gradient-to-br from-primary to-[#001A6E] bg-clip-text text-transparent;
+    }
+
+    .btn-primary {
+        @apply bg-primary text-white px-10 py-4 rounded-full font-semibold cursor-pointer transition-all duration-300 relative overflow-hidden;
+    }
+
+    .btn-primary::before {
+        content: '';
+        @apply absolute top-0 -left-full w-full h-full bg-gradient-to-r from-transparent via-white/20 to-transparent transition-all duration-500;
+    }
+
+    .btn-primary:hover::before {
+        @apply left-full;
+    }
 }
 
-body {
-    background: var(--background);
-    color: var(--foreground);
-    font-family: var(--font-sans);
-    overflow-x: hidden;
-    -webkit-font-smoothing: antialiased;
-    scroll-behavior: smooth;
-}
-
-::selection {
-    background: #1038A5;
-    color: white;
-}
-
-h1,
-h2,
-h3 {
-    font-family: var(--font-serif);
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: -0.02em;
-}
-
-.glass-card {
-    background: rgba(255, 255, 255, 0.05);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 20px;
-}
-
-.gradient-text {
-    background: linear-gradient(135deg, #1038A5 0%, #001A6E 100%);
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-}
-
-.btn-primary {
-    background: #1038A5;
-    color: white;
-    padding: 1rem 2.5rem;
-    border-radius: 50px;
-    font-weight: 600;
-    border: none;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    overflow: hidden;
-    position: relative;
-}
-
-.btn-primary::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-    transition: 0.5s;
-}
-
-.btn-primary:hover::before {
-    left: 100%;
-}
-
+/* Testimonial Section Styles */
 .testimonials-section {
-    @apply bg-white relative w-full min-h-screen;
+    @apply relative w-full min-h-screen bg-white;
 }
 
 .testimonials-section .pin-box {
-    @apply flex items-center justify-center w-full ps-16 absolute top-1/2 -translate-y-1/2;
+    @apply flex items-center justify-center w-full absolute top-1/2 -translate-y-1/2;
 }
 
-.testimonials-section .pin-box .vd-card {
-    @apply md:w-72 w-60 flex-none md:rounded-[2vw] rounded-3xl -ms-20 overflow-hidden relative border-[.5vw] border-milk;
+.pin-box .vd-card {
+    @apply md:w-52 w-44 flex-none md:rounded-[1.5vw] rounded-2xl -ms-16 overflow-hidden relative border-[.35vw] border-milk;
 }
 
-.testimonials-section h1 {
-    @apply uppercase text-[20.5vw] leading-[105%] tracking-[-.4vw] ml-[2vw] font-bold;
+/* Mobile Stack Styles */
+.mobile-video-card {
+    @apply border-4 border-milk bg-milk shadow-2xl;
+    box-shadow: 0 10px 40px rgba(16, 56, 165, 0.15);
 }
