@@ -16,7 +16,7 @@ function QuoteSection() {
             ref={rootRef}
             style={{
                 position: 'relative',
-                backgroundColor: '#f5f5f0',
+                backgroundColor: '#ffffff',
                 width: '100%',
                 height: '300svh',
             }}

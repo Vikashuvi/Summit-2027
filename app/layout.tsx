@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Inter, Playfair_Display } from "next/font/google";
 import "./globals.css";
+import SmoothScrollProvider from "@/components/SmoothScrollProvider";
+import CustomScrollbar from "@/components/CustomScrollbar";
 
 const inter = Inter({
     subsets: ["latin"],
@@ -31,7 +33,10 @@ export default function RootLayout({
     return (
         <html lang="en">
             <body className={`${inter.variable} ${playfair.variable} antialiased`}>
-                {children}
+                <SmoothScrollProvider>
+                    <CustomScrollbar />
+                    {children}
+                </SmoothScrollProvider>
             </body>
         </html>
     );
