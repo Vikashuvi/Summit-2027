@@ -64,10 +64,12 @@ export default function TestimonialSection() {
             const pinTl = gsap.timeline({
                 scrollTrigger: {
                     trigger: sectionRef.current,
-                    start: "10% top",
-                    end: "200% top",
+                    start: "top top",
+                    end: "+=200%",
                     scrub: 1.5,
                     pin: true,
+                    anticipatePin: 1,
+                    invalidateOnRefresh: true,
                 },
             });
 
@@ -92,7 +94,14 @@ export default function TestimonialSection() {
 
     return (
         <section ref={sectionRef} className="testimonials-section relative overflow-hidden">
-
+            <div className="absolute top-12 left-1/2 -translate-x-1/2 z-20 text-center w-full px-4">
+                <h2 className="text-5xl md:text-6xl font-bold text-primary mb-3 uppercase tracking-tight">
+                    Industry-Leading <span className="text-light-brown">Speakers</span>
+                </h2>
+                <p className="text-lg text-primary/60 max-w-xl mx-auto font-medium">
+                    Learn from world-class executives who have shaped the future
+                </p>
+            </div>
 
             <div className="pin-box">
                 {cards.map((card, index) => (
