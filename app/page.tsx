@@ -1,4 +1,5 @@
 import Hero from "./sections/Hero";
+import QuoteSection from "./sections/QuoteSection";
 import TestimonialSection from "./sections/TestimonialSection";
 import TestimonialSectionMobile from "./sections/TestimonialSectionMobile";
 
@@ -6,6 +7,9 @@ export default function Home() {
     return (
         <main className="min-h-screen bg-white">
             <Hero />
+
+            {/* Quote Section with Scroll Text Reveal Effect */}
+            <QuoteSection />
 
             {/* Desktop Testimonial Section */}
             <div className="hidden lg:block">
