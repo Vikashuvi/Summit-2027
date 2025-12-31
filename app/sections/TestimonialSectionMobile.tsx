@@ -31,11 +31,11 @@ export default function TestimonialSectionMobile() {
         <section className="relative bg-white min-h-screen overflow-hidden flex flex-col">
             {/* Heading Section */}
             <div className="pt-16 pb-6 text-center px-6 z-20">
-                <h2 className="text-4xl font-bold text-[#1038A5] mb-3 uppercase tracking-tighter leading-[0.9]">
+                <h2 className="text-4xl font-bold text-primary mb-3 uppercase tracking-tighter leading-[0.9]">
                     Industry-Leading <br />
-                    <span className="text-[#e3a458]">Speakers</span>
+                    <span className="text-light-brown">Speakers</span>
                 </h2>
-                <p className="text-sm text-[#1038A5]/60 max-w-[260px] mx-auto font-medium">
+                <p className="text-sm text-primary/60 max-w-[260px] mx-auto font-medium">
                     Learn from world-class executives who have shaped the future
                 </p>
             </div>
@@ -54,7 +54,7 @@ export default function TestimonialSectionMobile() {
                         cards={videoData.map((data, i) => (
                             <div
                                 key={i}
-                                className="w-full h-full border-4 border-[#faeade] rounded-2xl overflow-hidden shadow-2xl bg-[#faeade]"
+                                className="w-full h-full border-4 border-milk rounded-2xl overflow-hidden shadow-2xl bg-milk"
                                 onTouchStart={() => handlePlay(i)}
                                 onTouchEnd={() => handlePause(i)}
                                 onMouseEnter={() => handlePlay(i)}
@@ -78,7 +78,7 @@ export default function TestimonialSectionMobile() {
 
             {/* Hint Text */}
             <div className="text-center pb-8">
-                <p className="text-xs text-[#1038A5]/40">
+                <p className="text-xs text-primary/40">
                     Drag or tap to shuffle cards
                 </p>
             </div>

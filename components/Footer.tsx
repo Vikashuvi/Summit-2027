@@ -17,8 +17,8 @@ export default function Footer() {
         <footer className="relative overflow-hidden bg-primary text-white">
             {/* Top Decorative Line with Center Pill Shape */}
             <div className="absolute inset-x-0 top-0 z-20 flex items-center justify-center">
-                <div className="absolute inset-x-6 md:inset-x-12 top-0 h-px bg-gradient-to-r from-transparent via-[#e3a458]/40 to-transparent" />
-                <div className="absolute top-0 -translate-y-1/2 h-4 w-40 rounded-full bg-[#e3a458] shadow-[0_0_20px_rgba(227,164,88,0.6)]" />
+                <div className="absolute inset-x-6 md:inset-x-12 top-0 h-px bg-gradient-to-r from-transparent via-light-brown/40 to-transparent" />
+                <div className="absolute top-0 -translate-y-1/2 h-4 w-40 rounded-full bg-light-brown shadow-[0_0_20px_rgba(227,164,88,0.6)]" />
             </div>
 
             {/* Background Effects */}
@@ -87,8 +87,8 @@ export default function Footer() {
                             <div className="absolute inset-0 bg-neutral-800 opacity-50" />
                             <div className="absolute inset-0 flex items-center justify-center p-4">
                                 <div className="h-full w-full rounded-lg bg-neutral-700/50 backdrop-blur-sm border border-white/5 flex items-center justify-center">
-                                    <div className="h-8 w-8 rounded-full bg-[#e3a458]/20 flex items-center justify-center">
-                                        <div className="h-3 w-3 rounded-full bg-[#e3a458] animate-pulse" />
+                                    <div className="h-8 w-8 rounded-full bg-light-brown/20 flex items-center justify-center">
+                                        <div className="h-3 w-3 rounded-full bg-light-brown animate-pulse" />
                                     </div>
                                 </div>
                             </div>

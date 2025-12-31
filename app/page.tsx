@@ -1,4 +1,3 @@
-import Hero from "./sections/Hero";
 import QuoteSection from "./sections/QuoteSection";
 import TestimonialSection from "./sections/TestimonialSection";
 import TestimonialSectionMobile from "./sections/TestimonialSectionMobile";
@@ -8,8 +7,6 @@ import Footer from "@/components/Footer";
 export default function Home() {
     return (
         <main className="min-h-screen bg-white">
-            <Hero />
-
             {/* Quote Section with Scroll Text Reveal Effect */}
             <QuoteSection />
 
