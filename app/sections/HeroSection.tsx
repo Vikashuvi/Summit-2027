@@ -1,159 +1,173 @@
 "use client";
 
-import { useGSAP } from "@gsap/react";
+import React, { useEffect, useRef } from "react";
 import gsap from "gsap";
-import { useRef } from "react";
-import Image from "next/image";
+import { useGSAP } from "@gsap/react";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import SplitType from "split-type";
 
-export default function HeroSection() {
-    const containerRef = useRef<HTMLDivElement>(null);
-    const titleRef = useRef<HTMLHeadingElement>(null);
+gsap.registerPlugin(ScrollTrigger);
+
+const HeroSection = () => {
+    const sectionRef = useRef<HTMLElement>(null);
+    const videoContainerRef = useRef<HTMLDivElement>(null);
+    const videoRef = useRef<HTMLVideoElement>(null);
     const contentRef = useRef<HTMLDivElement>(null);
-    const navRef = useRef<HTMLDivElement>(null);
-    const bgRef = useRef<HTMLDivElement>(null);
+    const headingRef = useRef<HTMLHeadingElement>(null);
+    const subheadingRef = useRef<HTMLParagraphElement>(null);
+    const ctaRef = useRef<HTMLDivElement>(null);
 
-    useGSAP(() => {
-        const tl = gsap.timeline({ defaults: { ease: "power4.out" } });
+    useGSAP(
+        () => {
+            // Initialize SplitType for the heading
+            const splitHeading = new SplitType(headingRef.current!, { types: "chars,words" });
 
-        // Initial state
-        gsap.set([titleRef.current, contentRef.current, navRef.current], { opacity: 0, y: 50 });
+            // Set initial states
+            gsap.set(videoContainerRef.current, {
+                position: "fixed",
+                inset: 0,
+                zIndex: 50,
+                // Using clip-path for that premium morphing effect
+                clipPath: "inset(0% 0% 0% 0% round 0px)",
+            });
 
-        tl.to(navRef.current, {
-            opacity: 1,
-            y: 0,
-            duration: 1.2,
-        })
-            .to(titleRef.current, {
-                opacity: 1,
-                y: 0,
-                duration: 1.5,
-                stagger: 0.2,
-            }, "-=0.8")
-            .to(contentRef.current, {
-                opacity: 1,
-                y: 0,
-                duration: 1.2,
-            }, "-=1");
+            gsap.set(splitHeading.chars, {
+                y: 100,
+                opacity: 0,
+                rotateX: -90,
+            });
 
-        // Subtle background scale parallax on scroll
-        gsap.to(bgRef.current, {
-            scrollTrigger: {
-                trigger: containerRef.current,
-                start: "top top",
-                end: "bottom top",
-                scrub: true,
-            },
-            scale: 1.2,
-            yPercent: 20,
-            ease: "none",
-        });
+            gsap.set([subheadingRef.current, ctaRef.current], {
+                opacity: 0,
+                y: 20,
+            });
 
-    }, { scope: containerRef });
+            const tl = gsap.timeline();
+
+            // 0. Wait for 2 seconds as a splash screen
+            tl.to({}, { duration: 2 });
+
+            // 1. Transform Video Container (Morphing + Scale Down) - Slow Motion
+            tl.to(videoContainerRef.current, {
+                clipPath: "inset(10% 10% 45% 10% round 30px)",
+                y: 10,
+                duration: 2,
+                ease: "power2.inOut",
+                onComplete: () => {
+                    // Switch to absolute positioning so it scrolls with the content
+                    gsap.set(videoContainerRef.current, {
+                        position: "absolute",
+                        zIndex: 0,
+                    });
+                }
+            });
+
+            // 2. Animate Heading (Character by Character)
+            tl.to(
+                splitHeading.chars,
+                {
+                    y: 0,
+                    opacity: 1,
+                    rotateX: 0,
+                    duration: 1,
+                    stagger: 0.02,
+                    ease: "power4.out",
+                },
+                "-=0.6"
+            );
+
+            // 3. Animate Subheading and CTA
+            tl.to(
+                [subheadingRef.current, ctaRef.current],
+                {
+                    opacity: 1,
+                    y: 0,
+                    duration: 1,
+                    stagger: 0.2,
+                    ease: "power3.out",
+                },
+                "-=0.5"
+            );
+
+            // Add a subtle parallax to the video on scroll if needed
+            gsap.to(videoRef.current, {
+                scrollTrigger: {
+                    trigger: sectionRef.current,
+                    start: "top top",
+                    end: "bottom top",
+                    scrub: true,
+                },
+                y: 50,
+            });
+        },
+        { scope: sectionRef }
+    );
 
     return (
         <section
-            ref={containerRef}
-            className="relative h-screen w-full flex flex-col items-center justify-center overflow-hidden bg-primary"
+            ref={sectionRef}
+            className="relative w-full h-[100svh] bg-white overflow-hidden flex flex-col items-center justify-end pb-12 md:pb-20"
         >
-            {/* Grain Overlay */}
-            <div className="absolute inset-0 z-20 pointer-events-none opacity-[0.03] mix-blend-overlay">
-                <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
-                    <filter id="noiseFilter">
-                        <feTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch" />
-                    </filter>
-                    <rect width="100%" height="100%" filter="url(#noiseFilter)" />
-                </svg>
-            </div>
-
-            {/* Minimal Navigation Overlay */}
+            {/* Video Container (Splash -> Hero Media) */}
             <div
-                ref={navRef}
-                className="absolute top-0 left-0 w-full px-8 py-10 flex justify-between items-center z-50"
+                ref={videoContainerRef}
+                className="w-full h-full overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.1)]"
             >
-                <div className="flex items-center gap-2">
-                    <div className="w-8 h-8 rounded-full border border-milk/30 flex items-center justify-center backdrop-blur-md">
-                        <span className="text-white text-[10px] font-bold">S</span>
-                    </div>
-                    <span className="text-white text-xs font-bold tracking-[0.3em] uppercase">Summit '27</span>
-                </div>
-
-                <div className="flex gap-8 items-center">
-                    <span className="hidden md:block text-[10px] text-white/60 tracking-widest font-bold uppercase cursor-pointer hover:text-light-brown transition-colors">Experience</span>
-                    <span className="hidden md:block text-[10px] text-white/60 tracking-widest font-bold uppercase cursor-pointer hover:text-light-brown transition-colors">Speakers</span>
-                    <button className="px-6 py-2 border border-white/20 rounded-full text-[10px] text-white tracking-widest font-bold uppercase hover:bg-white hover:text-primary transition-all duration-300">
-                        Register
-                    </button>
-                </div>
+                <video
+                    ref={videoRef}
+                    className="w-full h-full object-cover scale-110"
+                    autoPlay
+                    muted
+                    loop
+                    playsInline
+                >
+                    <source
+                        src="/videos/hero.mp4"
+                        type="video/mp4"
+                    />
+                </video>
+                {/* Subtle Gradient Overlay */}
+                <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/40 pointer-events-none" />
             </div>
 
-            {/* Background elements */}
-            <div ref={bgRef} className="absolute inset-0 z-0 pointer-events-none">
-                <Image
-                    src="/images/hero-bg.png"
-                    alt="Luxury Background"
-                    fill
-                    className="object-cover opacity-30"
-                    priority
-                />
-            </div>
-
-            {/* Luxury Gradient Overlays */}
-            <div className="absolute inset-0 bg-gradient-to-b from-primary/20 via-transparent to-primary/60 pointer-events-none z-[1]" />
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,rgba(16,56,165,0.4)_100%)] pointer-events-none z-[1]" />
-
-            <div className="relative z-10 text-center px-4 max-w-[90vw]">
-                {/* Accent Tag */}
-                <div ref={contentRef} className="mb-6">
-                    <span className="inline-block py-1.5 px-3 border border-light-brown/30 rounded-full bg-light-brown/5 text-[10px] text-light-brown tracking-[0.4em] font-bold uppercase backdrop-blur-sm">
-                        Gathering of Visionaries • Dubai
-                    </span>
-                </div>
-
-                <div className="overflow-visible">
+            {/* Hero Content */}
+            <div
+                ref={contentRef}
+                className="relative z-20 w-full max-w-7xl px-8 flex flex-col md:flex-row items-end justify-between gap-8"
+            >
+                <div className="flex-1">
                     <h1
-                        ref={titleRef}
-                        className="text-[clamp(3rem,14vw,10rem)] leading-[0.85] text-white select-none font-serif tracking-[-0.04em] uppercase"
+                        ref={headingRef}
+                        className="text-primary text-6xl md:text-[8rem] font-bold leading-[0.8] tracking-tighter uppercase overflow-hidden"
                     >
-                        THE <br />
-                        <span className="italic font-normal lowercase font-serif px-2">exclusive</span> <br />
-                        <span className="text-light-brown">SUMMIT 2027</span>
+                        Summit <br />
+                        2027
                     </h1>
                 </div>
 
-                <div ref={contentRef} className="flex flex-col items-center gap-10 mt-12">
-                    <p className="text-sm md:text-lg text-white/70 max-w-xl font-sans tracking-wide leading-relaxed">
-                        Where world-class intelligence meets institutional grandeur.
-                        Join the most elite gathering of global visionaries.
+                <div className="flex-1 flex flex-col items-start gap-8 max-w-md">
+                    <p
+                        ref={subheadingRef}
+                        className="text-black text-lg md:text-xl leading-relaxed font-sans text-balance"
+                    >
+                        A converge of minds where technology meets human intuition.
+                        Designing the next epoch of digital existence.
                     </p>
-
-                    <div className="flex flex-col sm:flex-row gap-4 items-center">
-                        <button className="btn-primary group !px-12 !py-5">
-                            <span className="relative z-10 text-xs tracking-[0.2em] font-bold">RESERVE YOUR SEAT</span>
+                    <div ref={ctaRef} className="flex gap-4">
+                        <button className="btn-primary">
+                            Get Started
+                        </button>
+                        <button className="px-8 py-4 border border-primary/10 text-primary rounded-full hover:bg-primary/5 transition-all font-semibold uppercase text-xs tracking-widest">
+                            Full Program
                         </button>
                     </div>
                 </div>
             </div>
 
-            {/* Scroll Indicator */}
-            <div className="absolute bottom-10 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center gap-3">
-                <span className="text-[9px] tracking-[0.4em] text-white/30 font-bold uppercase">Begin Journey</span>
-                <div className="w-[1px] h-12 bg-gradient-to-b from-light-brown/50 to-transparent" />
-            </div>
-
-            {/* Bottom Content Detail */}
-            <div className="absolute bottom-10 left-10 md:block hidden z-20">
-                <div className="flex items-center gap-4">
-                    <div className="w-10 h-[1px] bg-white/20" />
-                    <span className="text-[10px] text-white/40 uppercase tracking-[0.3em] font-bold leading-none">9th Jan 2027</span>
-                </div>
-            </div>
-
-            <div className="absolute bottom-10 right-10 md:block hidden z-20">
-                <div className="flex items-center gap-4">
-                    <span className="text-[10px] text-white/40 uppercase tracking-[0.3em] font-bold leading-none">Limited to 100 Seats</span>
-                    <div className="w-10 h-[1px] bg-white/20" />
-                </div>
-            </div>
+            {/* Aesthetic Background Detail */}
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 -z-1 w-[200vw] h-[200vw] bg-neutral-50 rounded-full" />
         </section>
     );
-}
+};
+
+export default HeroSection;

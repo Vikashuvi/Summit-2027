@@ -1,0 +1,77 @@
+"use client";
+
+import React, { useState, useEffect } from "react";
+import Link from "next/link";
+import Image from "next/image";
+import { motion, AnimatePresence } from "framer-motion";
+
+const NavBar = () => {
+    const [scrolled, setScrolled] = useState(false);
+
+    useEffect(() => {
+        const handleScroll = () => {
+            setScrolled(window.scrollY > 20);
+        };
+        window.addEventListener("scroll", handleScroll);
+        return () => window.removeEventListener("scroll", handleScroll);
+    }, []);
+
+    const navLinks = [
+        { name: "Program", href: "#" },
+        { name: "Speakers", href: "#" },
+        { name: "Venue", href: "#" },
+        { name: "FAQ", href: "#" },
+    ];
+
+    return (
+        <motion.nav
+            initial={{ y: -100, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ duration: 1, ease: "circOut", delay: 2.5 }}
+            className={`fixed top-0 left-0 w-full z-[100] transition-all duration-500 ${scrolled ? "py-2 bg-white/80 backdrop-blur-xl border-b border-black/5" : "py-4 bg-transparent"
+                }`}
+        >
+            <div className="max-w-7xl mx-auto px-8 flex items-center justify-between">
+                {/* Logo */}
+                <Link href="/" className="group flex items-center">
+                    <div className="relative h-10 w-36 overflow-hidden">
+                        <Image
+                            src="/logo.png"
+                            alt="Summit 2027"
+                            fill
+                            className="object-contain"
+                        />
+                    </div>
+                </Link>
+
+                {/* Desktop Menu */}
+                <div className="hidden md:flex items-center gap-8 bg-white/50 backdrop-blur-xl px-10 py-3 rounded-full border border-black/5 shadow-[0_8px_32px_rgba(0,0,0,0.05)]">
+                    {navLinks.map((link) => (
+                        <Link
+                            key={link.name}
+                            href={link.href}
+                            className="text-primary/60 hover:text-primary font-semibold transition-colors text-[10px] uppercase tracking-[0.2em]"
+                        >
+                            {link.name}
+                        </Link>
+                    ))}
+                </div>
+
+                {/* CTA Button */}
+                <div className="flex items-center gap-6">
+                    <button className="btn-primary !px-8 !py-3 !text-[10px] uppercase tracking-widest whitespace-nowrap shadow-xl shadow-primary/20">
+                        Apply Now
+                    </button>
+
+                    {/* Mobile Menu Icon */}
+                    <button className="md:hidden w-10 h-10 flex flex-col items-center justify-center gap-1.5 bg-white border border-black/5 rounded-full shadow-sm">
+                        <div className="w-5 h-0.5 bg-primary" />
+                        <div className="w-5 h-0.5 bg-primary" />
+                    </button>
+                </div>
+            </div>
+        </motion.nav>
+    );
+};
+
+export default NavBar;

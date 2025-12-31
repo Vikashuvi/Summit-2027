@@ -1,3 +1,4 @@
+
 import HeroSection from "./sections/HeroSection";
 import QuoteSection from "./sections/QuoteSection";
 import GridSection from "./sections/GridSection";
@@ -15,7 +16,7 @@ export default function Home() {
             {/* Quote Section with Scroll Text Reveal Effect */}
             <QuoteSection />
 
-            
+
             {/* Desktop Testimonial Section */}
             <div className="hidden lg:block">
                 <TestimonialSection />

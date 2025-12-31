@@ -30,6 +30,8 @@ export const viewport = {
     maximumScale: 1,
 };
 
+import NavBar from "@/components/NavBar";
+
 export default function RootLayout({
     children,
 }: Readonly<{
@@ -39,6 +41,7 @@ export default function RootLayout({
         <html lang="en">
             <body className={`${montserrat.variable} ${playfair.variable} antialiased`}>
                 <SmoothScrollProvider>
+                    <NavBar />
                     <CustomScrollbar />
                     {children}
                 </SmoothScrollProvider>
