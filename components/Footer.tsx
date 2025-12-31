@@ -76,6 +76,10 @@ export default function Footer() {
                             <p className="font-medium text-white">Saturday, Jan 9, 2027</p>
                             <p>Hotel Green Park, Vadapalani,<br />Chennai, India</p>
                             <p className="text-white/50">08:00 — 17:00 IST</p>
+                            <div className="mt-4 pt-4 border-t border-white/10 flex flex-col gap-2">
+                                <a href="tel:+919841148012" className="hover:text-white transition-colors">+91-98411 48012</a>
+                                <a href="tel:+919840141206" className="hover:text-white transition-colors">+91-98401 41206</a>
+                            </div>
                         </div>
                     </div>
 
@@ -105,8 +109,8 @@ export default function Footer() {
                 <div className="flex flex-col gap-4 text-[10px] text-white/40 md:flex-row md:items-center md:justify-between font-sans uppercase tracking-widest">
                     <p>© 2027 Millionaire Summit</p>
                     <div className="flex flex-wrap gap-x-12 gap-y-2 font-medium">
-                        <Link href="#" className="transition-colors hover:text-white">Terms & Conditions</Link>
-                        <Link href="#" className="transition-colors hover:text-white">Privacy Policy</Link>
+                        <Link href="/terms" target="_blank" rel="noopener noreferrer" className="transition-colors hover:text-white">Terms & Conditions</Link>
+                        <Link href="/privacy" target="_blank" rel="noopener noreferrer" className="transition-colors hover:text-white">Privacy Policy</Link>
                     </div>
                 </div>
             </div>
