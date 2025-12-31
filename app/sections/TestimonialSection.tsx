@@ -9,38 +9,38 @@ gsap.registerPlugin(ScrollTrigger);
 
 const cards = [
     {
-        src: "/videos/f1.mp4",
+        src: "https://cdn.pixabay.com/video/2024/01/21/197531-905015052_large.mp4",
         rotation: "rotate-[-10deg]",
         translation: "",
     },
     {
-        src: "/videos/f2.mp4",
+        src: "https://cdn.pixabay.com/video/2024/05/25/213633_large.mp4",
         rotation: "rotate-[4deg]",
         translation: "",
     },
     {
-        src: "/videos/f3.mp4",
+        src: "https://cdn.pixabay.com/video/2025/01/22/253998_large.mp4",
         rotation: "rotate-[-4deg]",
         translation: "",
     },
     {
-        src: "/videos/f4.mp4",
+        src: "https://cdn.pixabay.com/video/2024/05/25/213633_large.mp4",
         rotation: "rotate-[4deg]",
         translation: "",
     },
     {
-        src: "/videos/f5.mp4",
+        src: "https://cdn.pixabay.com/video/2024/05/25/213633_large.mp4",
         rotation: "rotate-[-10deg]",
         translation: "",
     },
     {
-        src: "/videos/f6.mp4",
-        rotation: "rotate-[4deg]",
+        src: "https://cdn.pixabay.com/video/2024/05/25/213633_large.mp4",
+        rotation: "rotate-[-2deg]",
         translation: "",
     },
     {
-        src: "/videos/f7.mp4",
-        rotation: "rotate-[-3deg]",
+        src: "https://cdn.pixabay.com/video/2025/01/22/253998_large.mp4",
+        rotation: "rotate-[6deg]",
         translation: "",
     },
 ] as const;

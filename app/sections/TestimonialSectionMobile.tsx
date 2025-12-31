@@ -4,13 +4,14 @@ import { useRef } from "react";
 import Stack from "@/components/Stack";
 
 const videoData = [
-    { src: "/videos/f1.mp4", angle: -10 },
-    { src: "/videos/f2.mp4", angle: 4 },
-    { src: "/videos/f3.mp4", angle: -4 },
-    { src: "/videos/f4.mp4", angle: 4 },
-    { src: "/videos/f5.mp4", angle: -10 },
-    { src: "/videos/f6.mp4", angle: 4 },
-    { src: "/videos/f7.mp4", angle: -3 },
+    { src: "https://cdn.pixabay.com/video/2024/01/21/197531-905015052_large.mp4", angle: -10 },
+    { src: "https://cdn.pixabay.com/video/2024/05/25/213633_large.mp4", angle: 4 },
+    { src: "https://cdn.pixabay.com/video/2025/01/22/253998_large.mp4", angle: -4 },
+    { src: "https://cdn.pixabay.com/video/2024/05/25/213633_large.mp4", angle: 4 },
+    { src: "https://cdn.pixabay.com/video/2024/05/25/213633_large.mp4", angle: -10 },
+    { src: "https://cdn.pixabay.com/video/2024/05/25/213633_large.mp4", angle: 4 },
+    { src: "https://cdn.pixabay.com/video/2024/05/25/213633_large.mp4", angle: -3 },
+    { src: "https://media.istockphoto.com/id/2147548151/video/collaboration-laptop-and-colleagues-in-office-for-data-in-business-meeting-and-smile-for.mp4?s=mp4-640x640-is&k=20&c=pc8WsCF7jvzO_69Qan5Cs2TwLuULjRaL0xjDE9321D0=", angle: 6 },
 ];
 
 export default function TestimonialSectionMobile() {
