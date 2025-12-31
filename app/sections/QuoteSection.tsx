@@ -43,7 +43,8 @@ function QuoteSection() {
             >
                 {isMounted && rootRef.current && (
                     <TextOpacity trigger={rootRef.current}>
-                        When starting a new project, it&apos;s crucial to choose the appropriate tools. With prior experience in this area, I am confident in selecting the tools that will guide us to success.
+                       Every end is the foundation of a stronger beginning.
+The Millionaire Summit empowers elite leaders to act boldly, collaborate strategically, and shape what’s next.
                     </TextOpacity>
                 )}
             </h3>
