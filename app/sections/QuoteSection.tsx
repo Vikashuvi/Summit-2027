@@ -16,7 +16,7 @@ function QuoteSection() {
             ref={rootRef}
             className="quote-section"
         >
-            <h3 className="quote-text">
+            <h3 className="quote-text bg-white">
                 {isMounted && rootRef.current && (
                     <TextOpacity trigger={rootRef.current}>
                         Every end is the foundation of a stronger beginning.

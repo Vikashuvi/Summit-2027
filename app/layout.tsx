@@ -1,16 +1,18 @@
 import type { Metadata } from "next";
-import { Inter, Playfair_Display } from "next/font/google";
+import { Montserrat, Playfair_Display } from "next/font/google";
 import "./globals.css";
 import SmoothScrollProvider from "@/components/SmoothScrollProvider";
 import CustomScrollbar from "@/components/CustomScrollbar";
 
-const inter = Inter({
+const montserrat = Montserrat({
     subsets: ["latin"],
+    weight: ["300", "400", "500", "600", "700"],
     variable: "--font-sans",
 });
 
 const playfair = Playfair_Display({
     subsets: ["latin"],
+    weight: ["400", "500", "600", "700", "800", "900"],
     variable: "--font-serif",
 });
 
@@ -32,7 +34,7 @@ export default function RootLayout({
 }>) {
     return (
         <html lang="en">
-            <body className={`${inter.variable} ${playfair.variable} antialiased`}>
+            <body className={`${montserrat.variable} ${playfair.variable} antialiased`}>
                 <SmoothScrollProvider>
                     <CustomScrollbar />
                     {children}

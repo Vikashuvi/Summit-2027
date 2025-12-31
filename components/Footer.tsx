@@ -55,13 +55,13 @@ export default function Footer() {
 
                     {/* Navigation */}
                     <div className="lg:col-span-2">
-                        <p className="text-xs font-bold uppercase tracking-widest text-white mb-6">NAVIGATE</p>
+                        <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-white/50 mb-6">NAVIGATE</p>
                         <nav className="flex flex-col gap-3">
                             {["About", "Who For", "Agenda", "Tickets"].map((item) => (
                                 <Link
                                     key={item}
                                     href="#"
-                                    className="text-sm font-medium text-white/70 transition-colors hover:text-white"
+                                    className="text-sm font-medium text-white/70 transition-colors hover:text-white font-sans"
                                 >
                                     {item}
                                 </Link>
@@ -71,30 +71,29 @@ export default function Footer() {
 
                     {/* Info */}
                     <div className="lg:col-span-3">
-                        <p className="text-xs font-bold uppercase tracking-widest text-white mb-6">INFO</p>
-                        <div className="space-y-4 text-sm text-white/70">
-                            <p>Saturday, Jan 9, 2027</p>
+                        <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-white/50 mb-6">INFO</p>
+                        <div className="space-y-4 text-sm text-white/70 font-sans">
+                            <p className="font-medium text-white">Saturday, Jan 9, 2027</p>
                             <p>Hotel Green Park, Vadapalani,<br />Chennai, India</p>
-                            <p>08:00 — 17:00 IST</p>
+                            <p className="text-white/50">08:00 — 17:00 IST</p>
                         </div>
                     </div>
 
                     {/* Location */}
                     <div className="lg:col-span-3">
-                        <p className="text-xs font-bold uppercase tracking-widest text-white mb-6">LOCATION</p>
-                        <div className="relative aspect-square w-full max-w-[200px] overflow-hidden rounded-xl border border-white/10 bg-white/5">
-                            {/* Simple Map Placeholder Styling */}
-                            <div className="absolute inset-0 bg-neutral-800 opacity-50" />
-                            <div className="absolute inset-0 flex items-center justify-center p-4">
-                                <div className="h-full w-full rounded-lg bg-neutral-700/50 backdrop-blur-sm border border-white/5 flex items-center justify-center">
-                                    <div className="h-8 w-8 rounded-full bg-light-brown/20 flex items-center justify-center">
-                                        <div className="h-3 w-3 rounded-full bg-light-brown animate-pulse" />
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="absolute bottom-2 left-2 right-2 rounded bg-black/60 px-2 py-1 text-[10px] text-white/80 backdrop-blur-sm">
-                                View larger map
-                            </div>
+                        <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-white/50 mb-6">LOCATION</p>
+                        <div className="relative aspect-square w-full max-w-[200px] overflow-hidden rounded-xl border border-white/10 bg-white/5 group">
+                            <iframe
+                                src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d15547.01137410605!2d80.208092!3d13.051398!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a5266c2215d05b1%3A0xc998f6b89098b46f!2sHotel%20Greenpark%20Chennai!5e0!3m2!1sen!2sin!4v1767147443999!5m2!1sen!2sin"
+                                width="100%"
+                                height="100%"
+                                style={{ border: 0 }}
+                                allowFullScreen
+                                loading="lazy"
+                                referrerPolicy="no-referrer-when-downgrade"
+                                className="opacity-90 group-hover:opacity-100 transition-all duration-700"
+                            />
+                            <div className="absolute inset-0 pointer-events-none border border-white/10 rounded-xl" />
                         </div>
                     </div>
                 </div>
@@ -103,8 +102,8 @@ export default function Footer() {
                 <div className="mb-8 h-px bg-white/10" />
 
                 {/* Bottom Bar */}
-                <div className="flex flex-col gap-4 text-xs text-white/40 md:flex-row md:items-center md:justify-between">
-                    <p>2026 Millionaire Summit</p>
+                <div className="flex flex-col gap-4 text-[10px] text-white/40 md:flex-row md:items-center md:justify-between font-sans uppercase tracking-widest">
+                    <p>© 2027 Millionaire Summit</p>
                     <div className="flex flex-wrap gap-x-12 gap-y-2 font-medium">
                         <Link href="#" className="transition-colors hover:text-white">Terms & Conditions</Link>
                         <Link href="#" className="transition-colors hover:text-white">Privacy Policy</Link>
