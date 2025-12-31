@@ -19,6 +19,9 @@ const playfair = Playfair_Display({
 export const metadata: Metadata = {
     title: "Millionaire Summit 2027 | Executives Collaboration",
     description: "Join the most exclusive summit for the elite in 2027. Grandeur, Elegance, and Collaboration.",
+    icons: {
+        icon: "/fav.png",
+    },
 };
 
 export const viewport = {
