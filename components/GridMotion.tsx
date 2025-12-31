@@ -75,11 +75,11 @@ const GridMotion: FC<GridMotionProps> = ({ items = [], gradientColor = 'black' }
         }}
       >
         <div className="absolute inset-0 pointer-events-none z-[4] bg-[length:250px]"></div>
-        <div className="gap-4 flex-none relative w-[150vw] h-[150vh] grid grid-rows-4 grid-cols-1 rotate-[-15deg] origin-center z-[2]">
+        <div className="gap-2 sm:gap-3 md:gap-4 flex-none relative w-[250vw] sm:w-[200vw] md:w-[150vw] h-[120vh] sm:h-[130vh] md:h-[150vh] grid grid-rows-4 grid-cols-1 rotate-[-15deg] origin-center z-[2]">
           {Array.from({ length: 4 }, (_, rowIndex) => (
             <div
               key={rowIndex}
-              className="grid gap-4 grid-cols-7"
+              className="grid gap-2 sm:gap-3 md:gap-4 grid-cols-7"
               style={{ willChange: 'transform, filter' }}
               ref={el => {
                 if (el) rowRefs.current[rowIndex] = el;
@@ -91,7 +91,7 @@ const GridMotion: FC<GridMotionProps> = ({ items = [], gradientColor = 'black' }
                   (content.includes('.png') || content.includes('.jpg') || content.includes('.jpeg') || content.startsWith('http'));
 
                 return (
-                  <div key={itemIndex} className="relative w-full h-full min-h-[150px]">
+                  <div key={itemIndex} className="relative w-full h-full min-h-[120px] sm:min-h-[140px] md:min-h-[150px] lg:min-h-[180px]">
                     <div className="relative w-full h-full overflow-hidden rounded-[10px] bg-[#111] flex items-center justify-center text-white text-[1.5rem]">
                       {isImage ? (
                         <img
