@@ -58,15 +58,9 @@ const NavBar = () => {
                 </div>
 
                 {/* CTA Button */}
-                <div className="flex items-center gap-6">
-                    <button className="btn-primary !px-8 !py-3 !text-[10px] uppercase tracking-widest whitespace-nowrap shadow-xl shadow-primary/20">
+                <div className="flex items-center">
+                    <button className="btn-primary !px-6 !py-2.5 md:!px-8 md:!py-3 !text-[9px] md:!text-[10px] uppercase tracking-widest whitespace-nowrap shadow-xl shadow-primary/20">
                         Apply Now
-                    </button>
-
-                    {/* Mobile Menu Icon */}
-                    <button className="md:hidden w-10 h-10 flex flex-col items-center justify-center gap-1.5 bg-white border border-black/5 rounded-full shadow-sm">
-                        <div className="w-5 h-0.5 bg-primary" />
-                        <div className="w-5 h-0.5 bg-primary" />
                     </button>
                 </div>
             </div>

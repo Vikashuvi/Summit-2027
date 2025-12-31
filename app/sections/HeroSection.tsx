@@ -48,8 +48,14 @@ const HeroSection = () => {
             tl.to({}, { duration: 2 });
 
             // 1. Transform Video Container (Morphing + Scale Down) - Slow Motion
+            // Use different clip-path for mobile (taller video) vs desktop
+            const isMobile = window.innerWidth < 768;
+            const clipPathValue = isMobile
+                ? "inset(8% 8% 36% 8% round 24px)"  // Taller video on mobile (less bottom clip)
+                : "inset(10% 10% 45% 10% round 30px)";
+
             tl.to(videoContainerRef.current, {
-                clipPath: "inset(10% 10% 45% 10% round 30px)",
+                clipPath: clipPathValue,
                 y: 10,
                 duration: 2,
                 ease: "power2.inOut",
@@ -133,31 +139,31 @@ const HeroSection = () => {
             {/* Hero Content */}
             <div
                 ref={contentRef}
-                className="relative z-20 w-full max-w-7xl px-8 flex flex-col md:flex-row items-end justify-between gap-8"
+                className="relative z-20 w-full max-w-7xl px-6 md:px-8 flex flex-col md:flex-row items-center md:items-end justify-between gap-6 md:gap-8"
             >
-                <div className="flex-1">
+                <div className="flex-1 text-center md:text-left">
                     <h1
                         ref={headingRef}
-                        className="text-primary text-6xl md:text-[8rem] font-bold leading-[0.8] tracking-tighter uppercase overflow-hidden"
+                        className="text-primary text-5xl sm:text-6xl md:text-[8rem] font-bold leading-[0.85] tracking-tighter uppercase overflow-hidden"
                     >
                         Summit <br />
                         2027
                     </h1>
                 </div>
 
-                <div className="flex-1 flex flex-col items-start gap-8 max-w-md">
+                <div className="flex-1 flex flex-col items-center md:items-start gap-5 md:gap-8 max-w-md">
                     <p
                         ref={subheadingRef}
-                        className="text-black text-lg md:text-xl leading-relaxed font-sans text-balance"
+                        className="text-black text-base sm:text-lg md:text-xl leading-relaxed font-sans text-center md:text-left"
                     >
                         A converge of minds where technology meets human intuition.
                         Designing the next epoch of digital existence.
                     </p>
-                    <div ref={ctaRef} className="flex gap-4">
-                        <button className="btn-primary">
+                    <div ref={ctaRef} className="flex flex-row gap-3 sm:gap-4">
+                        <button className="btn-primary !px-5 !py-3 sm:!px-6 md:!px-8 md:!py-4 !text-[10px] sm:!text-xs">
                             Get Started
                         </button>
-                        <button className="px-8 py-4 border border-primary/10 text-primary rounded-full hover:bg-primary/5 transition-all font-semibold uppercase text-xs tracking-widest">
+                        <button className="px-5 py-3 sm:px-6 md:px-8 md:py-4 border border-primary/10 text-primary rounded-full hover:bg-primary/5 transition-all font-semibold uppercase text-[10px] sm:text-xs tracking-widest whitespace-nowrap">
                             Full Program
                         </button>
                     </div>
