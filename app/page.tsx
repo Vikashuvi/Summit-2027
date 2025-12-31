@@ -1,5 +1,6 @@
 import HeroSection from "./sections/HeroSection";
 import QuoteSection from "./sections/QuoteSection";
+import GridSection from "./sections/GridSection";
 import TestimonialSection from "./sections/TestimonialSection";
 import TestimonialSectionMobile from "./sections/TestimonialSectionMobile";
 
@@ -14,6 +15,7 @@ export default function Home() {
             {/* Quote Section with Scroll Text Reveal Effect */}
             <QuoteSection />
 
+            
             {/* Desktop Testimonial Section */}
             <div className="hidden lg:block">
                 <TestimonialSection />
@@ -23,6 +25,9 @@ export default function Home() {
             <div className="lg:hidden">
                 <TestimonialSectionMobile />
             </div>
+
+            {/* Immersive Grid Section */}
+            <GridSection />
 
             {/* Footer handles the final CTA and closing */}
             <Footer />

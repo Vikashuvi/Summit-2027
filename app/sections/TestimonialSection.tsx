@@ -104,7 +104,7 @@ export default function TestimonialSection() {
                 </p>
             </div>
 
-            <div className="pin-box">
+            <div className="pin-box ml-10">
                 {cards.map((card, index) => (
                     <div
                         key={card.src}
