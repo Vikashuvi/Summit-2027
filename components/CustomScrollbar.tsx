@@ -70,9 +70,8 @@ function CustomScrollbar() {
                 right: '1vw',
                 zIndex: 9999,
                 opacity: 0,
-                mixBlendMode: 'difference',
                 borderRadius: '0.15vw',
-                backgroundColor: 'rgba(240, 244, 241, 0.1)',
+                backgroundColor: 'rgba(16, 56, 165, 0.05)',
                 pointerEvents: 'none',
             }}
         >
@@ -82,7 +81,7 @@ function CustomScrollbar() {
                     position: 'absolute',
                     width: '0.25vw',
                     height: '6svh',
-                    backgroundColor: '#ffffff',
+                    backgroundColor: '#1038A5',
                     border: 'none',
                     borderRadius: '0.15vw',
                     top: 0,

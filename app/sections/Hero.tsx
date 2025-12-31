@@ -3,53 +3,55 @@
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import Image from "next/image";
+import Link from "next/link";
+import { motion } from "framer-motion";
 
 export default function Hero() {
     const containerRef = useRef<HTMLDivElement>(null);
-    const headlineRef = useRef<HTMLHeadingElement>(null);
-    const subheadlineRef = useRef<HTMLParagraphElement>(null);
-    const buttonRef = useRef<HTMLDivElement>(null);
-    const bgMediaRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
         const ctx = gsap.context(() => {
-            const tl = gsap.timeline({ defaults: { ease: "power4.out" } });
+            // Entrance animations
+            gsap.from(".reveal-up", {
+                y: 100,
+                opacity: 0,
+                duration: 1.5,
+                stagger: 0.1,
+                ease: "power4.out"
+            });
 
-            tl.from(bgMediaRef.current, {
-                scale: 1.2,
+            gsap.from(".reveal-scale", {
+                scale: 1.15,
                 opacity: 0,
                 duration: 2,
-            })
-                .from(".logo-anim", {
-                    y: -50,
-                    opacity: 0,
-                    duration: 1.2,
-                }, "-=1.5")
-                .from(headlineRef.current, {
-                    y: 100,
-                    opacity: 0,
-                    duration: 1.5,
-                }, "-=1")
-                .from(subheadlineRef.current, {
-                    y: 50,
-                    opacity: 0,
-                    duration: 1.2,
-                }, "-=1.2")
-                .from(buttonRef.current, {
-                    y: 30,
-                    opacity: 0,
-                    duration: 1,
-                }, "-=1");
-
-            // Floating elements animation
-            gsap.to(".floating-element", {
-                y: "random(-20, 20)",
-                x: "random(-10, 10)",
-                duration: "random(2, 4)",
-                repeat: -1,
-                yoyo: true,
-                ease: "sine.inOut"
+                ease: "power2.out"
             });
+
+            // Perspective mouse effect
+            const handleMouseMove = (e: MouseEvent) => {
+                const { clientX, clientY } = e;
+                const midX = window.innerWidth / 2;
+                const midY = window.innerHeight / 2;
+
+                gsap.to(".parallax-content", {
+                    x: (clientX - midX) * 0.02,
+                    y: (clientY - midY) * 0.02,
+                    rotationY: (clientX - midX) * 0.005,
+                    rotationX: (midY - clientY) * 0.005,
+                    duration: 1.5,
+                    ease: "power2.out"
+                });
+
+                gsap.to(".bg-orb", {
+                    x: (clientX - midX) * 0.08,
+                    y: (clientY - midY) * 0.08,
+                    duration: 2,
+                    ease: "power2.out"
+                });
+            };
+
+            window.addEventListener("mousemove", handleMouseMove);
+            return () => window.removeEventListener("mousemove", handleMouseMove);
         }, containerRef);
 
         return () => ctx.revert();
@@ -58,109 +60,170 @@ export default function Hero() {
     return (
         <section
             ref={containerRef}
-            className="relative min-h-[100svh] flex flex-col items-center justify-center overflow-hidden bg-white"
+            className="relative h-screen min-h-[850px] w-full bg-[#fafafa] overflow-hidden flex items-center justify-center perspective-[2000px]"
         >
-            {/* Background Media - Premium Feel */}
-            <div ref={bgMediaRef} className="absolute inset-0 z-0">
-                <div className="absolute inset-0 bg-gradient-to-b from-white via-white/80 to-transparent z-10" />
-                <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,white_100%)] z-10" />
-                <video
-                    autoPlay
-                    muted
-                    loop
-                    playsInline
-                    className="w-full h-full object-cover opacity-20 scale-105"
-                >
-                    <source src="/videos/f2.mp4" type="video/mp4" />
-                </video>
+            {/* Architectural Background Layer */}
+            <div className="absolute inset-0 z-0 pointer-events-none">
+                <div className="bg-orb absolute top-[-20%] left-[-10%] w-[60vw] h-[60vw] rounded-full bg-primary/[0.03] blur-[150px]" />
+                <div className="bg-orb absolute bottom-[-10%] right-[-10%] w-[40vw] h-[40vw] rounded-full bg-light-brown/[0.05] blur-[120px]" />
+
+                {/* Minimalist Tech Grid */}
+                <div className="absolute inset-0 opacity-[0.03]"
+                    style={{ backgroundImage: 'radial-gradient(circle, #1038A5 1px, transparent 1px)', backgroundSize: '60px 60px' }}
+                />
+
+                {/* Background Video Masked */}
+                <div className="absolute inset-0 opacity-10 mix-blend-multiply">
+                    <video
+                        autoPlay
+                        muted
+                        loop
+                        playsInline
+                        className="w-full h-full object-cover grayscale"
+                    >
+                        <source src="/videos/f2.mp4" type="video/mp4" />
+                    </video>
+                </div>
             </div>
 
-            {/* Floating Decorative Orbs */}
-            <div className="absolute top-[10%] left-[15%] w-64 h-64 bg-primary/5 rounded-full blur-3xl floating-element" />
-            <div className="absolute bottom-[15%] right-[10%] w-96 h-96 bg-light-brown/5 rounded-full blur-3xl floating-element" />
-
-            {/* Header Content */}
-            <header className="absolute top-0 left-0 w-full p-8 md:p-12 z-30 flex justify-between items-center logo-anim">
-                <div className="relative h-10 w-40 md:h-12 md:w-48 transition-transform hover:scale-105 duration-300">
-                    <Image
-                        src="/logo.png"
-                        alt="Executives Collaboration"
-                        fill
-                        className="object-contain"
-                        priority
-                    />
+            {/* Premium Floating Header */}
+            <header className="absolute top-0 left-0 w-full p-8 md:p-12 z-50 flex justify-between items-center reveal-up">
+                <div className="relative h-12 w-48 transition-transform hover:scale-105 duration-500">
+                    <Image src="/logo.png" alt="Summit 2027" fill className="object-contain" priority />
                 </div>
-                <div className="hidden md:flex items-center gap-8">
-                    <span className="text-[10px] uppercase tracking-[0.4em] font-bold text-primary/40">Established 2027</span>
-                    <div className="w-12 h-[1px] bg-primary/20" />
+
+                <div className="hidden lg:flex items-center gap-16">
+                    <div className="flex items-center gap-10">
+                        {['Perspective', 'Heritage', 'Apply'].map((item) => (
+                            <Link key={item} href="#" className="relative group text-[10px] uppercase tracking-[0.4em] font-black text-primary/40 hover:text-primary transition-all">
+                                {item}
+                                <span className="absolute -bottom-2 left-0 w-0 h-px bg-primary group-hover:w-full transition-all duration-500" />
+                            </Link>
+                        ))}
+                    </div>
+                </div>
+
+                <div className="flex items-center gap-8">
+                    <span className="hidden md:block text-[9px] uppercase tracking-[0.3em] font-black text-primary/30">Limited To 500</span>
+                    <button className="group relative px-8 py-3 bg-primary text-white rounded-full text-[10px] font-black uppercase tracking-widest overflow-hidden transition-all shadow-lg shadow-primary/20">
+                        <span className="relative z-10">Invite Only</span>
+                        <div className="absolute inset-0 bg-light-brown translate-y-full group-hover:translate-y-0 transition-transform duration-500" />
+                    </button>
                 </div>
             </header>
 
-            {/* Hero Main Content */}
-            <div className="relative z-20 text-center px-6 max-w-5xl mx-auto flex flex-col items-center py-16 md:py-24">
-                <div className="mb-8 inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-primary/10 bg-white/50 backdrop-blur-md shadow-sm">
-                    <span className="flex h-1.5 w-1.5 rounded-full bg-light-brown animate-pulse" />
-                    <span className="text-[9px] uppercase tracking-[0.15em] font-bold text-primary/60">Limited to 500 Attendees</span>
+            {/* Main Interactive Stage */}
+            <div className="parallax-content relative z-10 w-full max-w-7xl px-6 flex flex-col items-center">
+
+                <div className="relative flex flex-col items-center text-center">
+                    {/* Background Ghost Text */}
+                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 select-none pointer-events-none opacity-[0.02]">
+                        <h2 className="text-[28vw] font-black text-primary tracking-tighter leading-none uppercase">
+                            IMPACT
+                        </h2>
+                    </div>
+
+                    <div className="relative z-10">
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 1, delay: 0.2 }}
+                            className="mb-10 inline-flex items-center gap-4 px-6 py-2 rounded-full border border-primary/10 bg-white/80 backdrop-blur-xl shadow-xl reveal-up"
+                        >
+                            <span className="flex h-2 w-2 rounded-full bg-light-brown animate-pulse" />
+                            <span className="text-[10px] uppercase tracking-[0.3em] font-black text-primary/60 italic">Architects of Heritage</span>
+                        </motion.div>
+
+                        <h1 className="flex flex-col gap-2 leading-[0.8] reveal-up">
+                            <span className="text-6xl md:text-8xl lg:text-[10vw] font-black text-primary tracking-tighter uppercase">
+                                Defining <span className="font-serif italic text-light-brown font-normal lowercase tracking-normal">the</span>
+                            </span>
+                            <span className="text-6xl md:text-8xl lg:text-[10vw] font-black text-primary tracking-tighter uppercase block">
+                                LEGACY.
+                            </span>
+                        </h1>
+
+                        <div className="mt-14 flex flex-col md:flex-row items-center justify-center gap-12 reveal-up">
+                            <p className="text-sm md:text-lg text-primary/40 max-w-sm text-center md:text-right font-medium leading-relaxed border-r-0 md:border-r border-primary/10 pr-0 md:pr-12">
+                                A restricted gathering in Silicon Valley to shape the next era of global collaboration.
+                            </p>
+
+                            <div className="flex flex-col items-center md:items-start gap-4">
+                                <button className="group relative px-14 py-7 bg-primary text-white rounded-full font-black uppercase tracking-widest text-xs overflow-hidden transition-all hover:scale-105 hover:shadow-[0_30px_60px_rgba(16,56,165,0.25)]">
+                                    <span className="relative z-10">Secure Your Invitation</span>
+                                    <div className="absolute inset-0 bg-light-brown translate-y-full group-hover:translate-y-0 transition-transform duration-500" />
+                                </button>
+                                <span className="text-[9px] uppercase tracking-widest font-black text-primary/20">5 Days • 50 Keynotes • 1 Mission</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
-                <h1
-                    ref={headlineRef}
-                    className="text-4xl md:text-6xl lg:text-7xl font-bold leading-[0.9] tracking-tighter text-primary mb-8"
-                >
-                    THE PINNACLE <br />
-                    <span className="font-serif italic text-light-brown font-normal lowercase tracking-normal inline-block">of</span> EXCELLENCE.
-                </h1>
-
-                <p
-                    ref={subheadlineRef}
-                    className="text-sm md:text-lg text-primary/60 max-w-xl mx-auto font-medium leading-relaxed mb-10"
-                >
-                    A curated gathering of global visionaries, shaping the legacy
-                    of tomorrow through exclusive collaboration and grand innovation.
-                </p>
-
-                <div ref={buttonRef} className="flex flex-col sm:flex-row gap-6 items-center">
-                    <button className="relative px-8 py-3.5 bg-primary text-white rounded-full font-bold uppercase tracking-widest text-[10px] overflow-hidden transition-all shadow-lg shadow-primary/20 hover:scale-105 hover:shadow-xl duration-300">
-                        <span className="relative z-10">Secure Your Invitation</span>
-                        <div className="absolute inset-0 bg-white/20 translate-y-full hover:translate-y-0 transition-transform duration-300" />
-                    </button>
-                    <button className="group flex items-center gap-2 text-primary font-bold uppercase tracking-widest text-[10px] hover:text-primary/80 transition-colors">
-                        <span className="h-[1px] w-6 bg-primary/30 group-hover:w-12 transition-all duration-300" />
-                        Learn More
-                    </button>
-                </div>
-            </div>
-
-            {/* Bottom Info Section */}
-            <div className="absolute bottom-12 left-0 w-full px-8 md:px-12 z-30 flex justify-between items-end">
+                {/* Floating Experience Data Islands */}
                 <div className="hidden lg:block">
-                    <div className="text-[10px] uppercase tracking-[0.3em] font-bold text-primary/30 mb-2">Location</div>
-                    <div className="text-sm font-bold text-primary/60">Silicon Valley, CA</div>
-                </div>
-
-                {/* Refined Scroll indicator */}
-                <div className="flex flex-col items-center gap-4">
-                    <div className="w-px h-16 bg-gradient-to-b from-primary/5 to-primary/40 relative">
-                        <div className="absolute top-0 left-0 w-full h-1/3 bg-primary animate-[scroll_2s_infinite]" />
+                    {/* Left Island */}
+                    <div className="absolute top-[0%] left-[-15%] reveal-scale pointer-events-auto">
+                        <div className="w-64 p-8 bg-white/80 backdrop-blur-2xl rounded-[3rem] border border-primary/5 shadow-2xl flex flex-col gap-4 transform -rotate-6 hover:rotate-0 transition-transform duration-1000">
+                            <div className="flex justify-between items-center">
+                                <span className="text-[10px] uppercase tracking-widest font-bold text-primary/30">Net Worth</span>
+                                <div className="w-1.5 h-1.5 rounded-full bg-light-brown" />
+                            </div>
+                            <span className="text-5xl font-black text-primary">$15T+</span>
+                            <p className="text-[9px] uppercase tracking-[0.2em] font-black text-primary/40 leading-relaxed">
+                                Managed Assets represented by our inner circle.
+                            </p>
+                        </div>
                     </div>
-                </div>
 
-                <div className="text-right">
-                    <div className="text-[10px] uppercase tracking-[0.3em] font-bold text-primary/30 mb-2">Social</div>
-                    <div className="flex gap-4">
-                        <span className="text-xs font-bold text-primary/60 hover:text-primary cursor-pointer transition-colors">IN</span>
-                        <span className="text-xs font-bold text-primary/60 hover:text-primary cursor-pointer transition-colors">TW</span>
+                    {/* Right Island */}
+                    <div className="absolute bottom-[0%] right-[-15%] reveal-scale pointer-events-auto">
+                        <div className="w-72 overflow-hidden bg-white rounded-[3rem] border border-primary/5 shadow-2xl transform rotate-3 hover:rotate-0 transition-all duration-1000 group">
+                            <div className="relative h-48 w-full grayscale opacity-80 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-1000">
+                                <Image
+                                    src="https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&q=80"
+                                    alt="Venue"
+                                    fill
+                                    className="object-cover"
+                                />
+                                <div className="absolute inset-0 bg-primary/20 mix-blend-overlay" />
+                            </div>
+                            <div className="p-8 space-y-2">
+                                <p className="text-[10px] uppercase tracking-widest font-bold text-primary">Silicon Valley</p>
+                                <p className="text-xl font-black text-primary/80 uppercase tracking-tighter">The Innovation Hub</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <style jsx>{`
-                @keyframes scroll {
-                    0% { transform: translateY(0); opacity: 0; }
-                    50% { opacity: 1; }
-                    100% { transform: translateY(100%); opacity: 0; }
-                }
-            `}</style>
+            {/* Bottom Orchestration Bar */}
+            <div className="absolute bottom-0 left-0 w-full p-12 z-20 flex flex-col md:flex-row justify-between items-center gap-8 border-t border-primary/5 reveal-up">
+                <div className="flex items-center gap-16 w-full md:w-auto justify-between md:justify-start">
+                    <div className="space-y-1">
+                        <p className="text-[9px] uppercase tracking-[0.4em] font-black text-primary/20 leading-none">The Date</p>
+                        <p className="text-sm font-black text-primary tracking-tighter uppercase whitespace-nowrap">9th Jan 2027</p>
+                    </div>
+                    <div className="w-px h-10 bg-primary/10" />
+                    <div className="space-y-1 text-right md:text-left">
+                        <p className="text-[9px] uppercase tracking-[0.4em] font-black text-primary/20 leading-none">The Venue</p>
+                        <p className="text-sm font-black text-primary tracking-tighter uppercase">Palo Alto, CA</p>
+                    </div>
+                </div>
+
+                <div className="flex items-center gap-8 group cursor-pointer overflow-hidden">
+                    <div className="flex flex-col items-end">
+                        <span className="text-[10px] uppercase tracking-[0.3em] font-black text-primary/40 group-hover:text-primary transition-colors">Start Expedition</span>
+                        <span className="text-[8px] uppercase tracking-widest font-bold text-light-brown opacity-0 group-hover:opacity-100 transition-opacity">Protocol Alpha-7</span>
+                    </div>
+                    <div className="relative w-12 h-12 rounded-full border border-primary/10 flex items-center justify-center overflow-hidden">
+                        <motion.div
+                            animate={{ y: [0, 40] }}
+                            transition={{ duration: 1.5, repeat: Infinity }}
+                            className="absolute top-[-20px] w-0.5 h-10 bg-primary shadow-[0_0_10px_rgba(16,56,165,0.5)]"
+                        />
+                    </div>
+                </div>
+            </div>
         </section>
     );
 }

@@ -3,6 +3,8 @@ import QuoteSection from "./sections/QuoteSection";
 import TestimonialSection from "./sections/TestimonialSection";
 import TestimonialSectionMobile from "./sections/TestimonialSectionMobile";
 
+import Footer from "@/components/Footer";
+
 export default function Home() {
     return (
         <main className="min-h-screen bg-white">
@@ -21,13 +23,8 @@ export default function Home() {
                 <TestimonialSectionMobile />
             </div>
 
-            {/* Additional sections can be added here */}
-            <section className="h-screen flex items-center justify-center bg-[#1038A5] text-white">
-                <h2 className="text-4xl md:text-6xl text-center">
-                    Building the Future <br />
-                    Together.
-                </h2>
-            </section>
+            {/* Footer handles the final CTA and closing */}
+            <Footer />
         </main>
     );
 }
