@@ -174,13 +174,14 @@ const TicketSection = () => {
                         </div>
 
                         {/* CTA Button */}
-                        <motion.button
+                        <motion.a
+                            href="https://summitawards2026.executivescollaboration.com/#/summit2027"
                             whileHover={{ scale: 1.01 }}
                             whileTap={{ scale: 0.99 }}
-                            className="btn-primary w-full !rounded-xl py-3.5 md:py-4 px-8 text-sm md:text-base uppercase tracking-wide transition-all duration-300"
+                            className="btn-primary w-full !rounded-xl py-3.5 md:py-4 px-8 text-sm md:text-base uppercase tracking-wide transition-all duration-300 text-center block"
                         >
                             Apply Now
-                        </motion.button>
+                        </motion.a>
 
                         {/* Trust Indicator - Razorpay Only */}
                         <div className="flex flex-col items-center mt-8 text-gray-400">

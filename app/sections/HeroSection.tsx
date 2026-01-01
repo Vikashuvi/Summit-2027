@@ -188,9 +188,12 @@ const HeroSection = () => {
                         Designing the next epoch of digital existence.
                     </p>
                     <div ref={ctaRef} className="flex flex-row gap-3 sm:gap-4 opacity-0">
-                        <button className="btn-primary !px-6 !py-3 sm:!px-8 md:!px-10 md:!py-4 !text-xs sm:!text-sm">
+                        <a
+                            href="https://summitawards2026.executivescollaboration.com/#/summit2027"
+                            className="btn-primary !px-6 !py-3 sm:!px-8 md:!px-10 md:!py-4 !text-xs sm:!text-sm"
+                        >
                             Apply Now
-                        </button>
+                        </a>
                     </div>
                 </div>
             </div>

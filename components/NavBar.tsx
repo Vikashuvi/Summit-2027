@@ -70,9 +70,12 @@ const NavBar = () => {
 
                         {/* CTA Button */}
                         <div className="flex items-center">
-                            <button className="btn-primary !px-6 !py-2.5 md:!px-8 md:!py-3 !text-[9px] md:!text-[10px] uppercase tracking-widest whitespace-nowrap shadow-xl shadow-primary/20">
+                            <a
+                                href="https://summitawards2026.executivescollaboration.com/#/summit2027"
+                                className="btn-primary !px-6 !py-2.5 md:!px-8 md:!py-3 !text-[9px] md:!text-[10px] uppercase tracking-widest whitespace-nowrap shadow-xl shadow-primary/20"
+                            >
                                 Apply Now
-                            </button>
+                            </a>
                         </div>
                     </div>
                 </motion.nav>
