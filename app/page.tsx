@@ -4,6 +4,7 @@ import QuoteSection from "./sections/QuoteSection";
 import GridSection from "./sections/GridSection";
 import TestimonialSection from "./sections/TestimonialSection";
 import TestimonialSectionMobile from "./sections/TestimonialSectionMobile";
+import TicketSection from "./sections/TicketSection";
 
 import Footer from "@/components/Footer";
 
@@ -26,6 +27,9 @@ export default function Home() {
             <div className="lg:hidden">
                 <TestimonialSectionMobile />
             </div>
+
+            {/* Ticket Pricing Section */}
+            <TicketSection />
 
             {/* Immersive Grid Section */}
             <GridSection />

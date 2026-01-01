@@ -97,9 +97,9 @@ export default function TestimonialSection() {
             <div className="absolute top-16 left-1/2 -translate-x-1/2 z-20 w-full px-6 flex flex-col items-center justify-center text-center">
                 <h2 className="text-4xl md:text-5xl font-bold text-primary mb-4 uppercase tracking-tighter leading-none">
                     Industry-Leading <br />
-                    <span className="text-light-brown">Speakers</span>
+                    <span className="text-black">Speakers</span>
                 </h2>
-                <p className="text-sm text-primary/60 max-w-lg mx-auto font-medium">
+                <p className="text-sm text-black max-w-lg mx-auto font-medium">
                     Learn from world-class executives who have shaped the future
                 </p>
             </div>
