@@ -51,15 +51,9 @@ export default function TestimonialSection() {
 
     useGSAP(
         () => {
-            if (!sectionRef.current) return;
+            if (!sectionRef.current || window.innerWidth < 1024) return;
 
             const q = gsap.utils.selector(sectionRef);
-
-
-
-
-
-
 
             const pinTl = gsap.timeline({
                 scrollTrigger: {
@@ -107,7 +101,7 @@ export default function TestimonialSection() {
             <div className="pin-box ml-10">
                 {cards.map((card, index) => (
                     <div
-                        key={card.src}
+                        key={index}
                         className={`vd-card ${card.translation} ${card.rotation}`}
                         onMouseEnter={() => handlePlay(index)}
                         onMouseLeave={() => handlePause(index)}

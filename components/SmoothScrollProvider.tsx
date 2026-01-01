@@ -17,6 +17,9 @@ function SmoothScrollProvider({ children }: SmoothScrollProviderProps) {
     const lenisRef = useRef<Lenis | null>(null);
 
     useEffect(() => {
+        // Only initialize Lenis on desktop (width >= 1024px)
+        if (window.innerWidth < 1024) return;
+
         // Initialize Lenis smooth scroll
         const lenis = new Lenis({
             duration: 1.2, // Duration of the scroll animation

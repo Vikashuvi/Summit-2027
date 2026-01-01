@@ -10,6 +10,14 @@ gsap.registerPlugin(ScrollTrigger);
 
 const HeroSection = () => {
     const [isVideoLoaded, setIsVideoLoaded] = React.useState(false);
+
+    // Fallback timeout - show content after 2 seconds max
+    React.useEffect(() => {
+        const timeout = setTimeout(() => {
+            setIsVideoLoaded(true);
+        }, 2000);
+        return () => clearTimeout(timeout);
+    }, []);
     const hasAnimated = useRef(false);
     const sectionRef = useRef<HTMLElement>(null);
     const videoContainerRef = useRef<HTMLDivElement>(null);
@@ -55,7 +63,7 @@ const HeroSection = () => {
             // 1. Transform Video Container (Morphing + Scale Down)
             const isMobile = window.innerWidth < 768;
             const clipPathValue = isMobile
-                ? "inset(8% 8% 36% 8% round 24px)"
+                ? "inset(8% 8% 38% 8% round 24px)"
                 : "inset(10% 10% 45% 10% round 30px)";
 
             tl.to(videoContainerRef.current, {
@@ -119,7 +127,7 @@ const HeroSection = () => {
     return (
         <section
             ref={sectionRef}
-            className="relative w-full h-[100svh] bg-white overflow-hidden flex flex-col items-center justify-end pb-12 md:pb-20"
+            className="relative w-full h-[100svh] bg-white overflow-hidden flex flex-col items-center justify-end pb-8 md:pb-20"
         >
             {/* Loading Overlay */}
             {!isVideoLoaded && (
@@ -146,7 +154,7 @@ const HeroSection = () => {
                     loop
                     playsInline
                     poster="/images/hero-bg.png"
-                    onCanPlayThrough={() => setIsVideoLoaded(true)}
+                    onLoadedMetadata={() => setIsVideoLoaded(true)}
                 >
                     <source
                         src="/videos/hero.mp4"
@@ -159,9 +167,9 @@ const HeroSection = () => {
             {/* Hero Content */}
             <div
                 ref={contentRef}
-                className={`relative z-20 w-full max-w-7xl px-6 md:px-8 flex flex-col md:flex-row items-center md:items-end justify-between gap-6 md:gap-8 ${!isVideoLoaded ? 'invisible' : ''}`}
+                className={`relative z-20 w-full max-w-7xl px-6 md:px-8 flex flex-col md:flex-row items-center md:items-end justify-between gap-4 md:gap-8 ${!isVideoLoaded ? 'invisible' : ''}`}
             >
-                <div className="flex-1 text-center md:text-left">
+                <div className="w-full md:flex-1 text-center md:text-left">
                     <h1
                         ref={headingRef}
                         className="text-primary text-5xl sm:text-6xl md:text-[8rem] font-bold leading-[0.85] tracking-tighter uppercase overflow-hidden"
@@ -171,7 +179,7 @@ const HeroSection = () => {
                     </h1>
                 </div>
 
-                <div className="flex-1 flex flex-col items-center md:items-end gap-5 md:gap-8 max-w-md">
+                <div className="w-full md:flex-1 flex flex-col items-center md:items-end gap-4 md:gap-8 max-w-md">
                     <p
                         ref={subheadingRef}
                         className="text-black text-base sm:text-lg md:text-xl leading-relaxed font-sans text-center md:text-right opacity-0"

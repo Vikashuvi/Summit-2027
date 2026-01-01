@@ -127,7 +127,13 @@ html.lenis body {
     position: relative;
     background-color: var(--color-bg-quote);
     width: 100%;
-    height: 300svh;
+    height: auto;
+}
+
+@media (min-width: 1024px) {
+    .quote-section {
+        height: 300svh;
+    }
 }
 
 .quote-section .quote-text {
@@ -159,14 +165,16 @@ html.lenis body {
     max-width: 1000px;
 }
 
-@media (max-width: 768px) {
-    .text-opacity-container {
-        width: 90%;
+@media (max-width: 1024px) {
+    .quote-section .quote-text {
+        position: relative !important;
+        min-height: auto !important;
+        padding: 6rem 1.5rem !important;
+        font-size: clamp(1.25rem, 5vw, 2rem);
     }
 
-    .quote-section .quote-text {
-        font-size: clamp(1.25rem, 5vw, 2rem);
-        padding: 1.5rem;
+    .text-opacity-container {
+        width: 90% !important;
     }
 }
 
