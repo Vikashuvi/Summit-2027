@@ -177,7 +177,7 @@ const TicketSection = () => {
                         <motion.button
                             whileHover={{ scale: 1.01 }}
                             whileTap={{ scale: 0.99 }}
-                            className="w-full bg-primary text-white py-3.5 md:py-4 px-8 rounded-xl font-semibold text-sm md:text-base uppercase tracking-wide transition-all duration-300 hover:bg-primary/90"
+                            className="btn-primary w-full !rounded-xl py-3.5 md:py-4 px-8 text-sm md:text-base uppercase tracking-wide transition-all duration-300"
                         >
                             Apply Now
                         </motion.button>

@@ -14,6 +14,14 @@ interface SmoothScrollProviderProps {
 }
 
 function SmoothScrollProvider({ children }: SmoothScrollProviderProps) {
+    useEffect(() => {
+        // Force scroll to top on refresh
+        if ('scrollRestoration' in history) {
+            history.scrollRestoration = 'manual';
+        }
+        window.scrollTo(0, 0);
+    }, []);
+
     const lenisRef = useRef<Lenis | null>(null);
 
     useEffect(() => {
