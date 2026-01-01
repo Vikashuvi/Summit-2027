@@ -47,6 +47,7 @@ export default function TestimonialSectionMobile() {
                         randomRotation={false}
                         sensitivity={180}
                         sendToBackOnClick={true}
+                        mobileClickOnly={true}
                         autoplay={true}
                         autoplayDelay={4000}
                         pauseOnHover={true}
@@ -79,7 +80,7 @@ export default function TestimonialSectionMobile() {
             {/* Hint Text */}
             <div className="text-center pb-8">
                 <p className="text-xs text-primary/40">
-                    Drag or tap to shuffle cards
+                    Tap to shuffle cards
                 </p>
             </div>
         </section>
