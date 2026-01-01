@@ -7,6 +7,7 @@ import { motion, AnimatePresence } from "framer-motion";
 
 const NavBar = () => {
     const [scrolled, setScrolled] = useState(false);
+    const [isVisible, setIsVisible] = useState(false);
 
     useEffect(() => {
         const handleScroll = () => {
@@ -14,6 +15,14 @@ const NavBar = () => {
         };
         window.addEventListener("scroll", handleScroll);
         return () => window.removeEventListener("scroll", handleScroll);
+    }, []);
+
+    useEffect(() => {
+        const handleHeroAnimationComplete = () => {
+            setIsVisible(true);
+        };
+        window.addEventListener('heroAnimationComplete', handleHeroAnimationComplete);
+        return () => window.removeEventListener('heroAnimationComplete', handleHeroAnimationComplete);
     }, []);
 
     const navLinks = [
@@ -24,47 +33,51 @@ const NavBar = () => {
     ];
 
     return (
-        <motion.nav
-            initial={{ y: -100, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ duration: 1, ease: "circOut", delay: 2.5 }}
-            className={`fixed top-0 left-0 w-full z-[100] transition-all duration-500 ${scrolled ? "py-2 bg-white/80 backdrop-blur-xl border-b border-black/5" : "py-4 bg-transparent"
-                }`}
-        >
-            <div className="max-w-7xl mx-auto px-8 flex items-center justify-between">
-                {/* Logo */}
-                <Link href="/" className="group flex items-center">
-                    <div className="relative h-10 w-36 overflow-hidden">
-                        <Image
-                            src="/logo.png"
-                            alt="Summit 2027"
-                            fill
-                            className="object-contain"
-                        />
-                    </div>
-                </Link>
-
-                {/* Desktop Menu */}
-                <div className="hidden md:flex items-center gap-8 bg-white/50 backdrop-blur-xl px-10 py-3 rounded-full border border-black/5 shadow-[0_8px_32px_rgba(0,0,0,0.05)]">
-                    {navLinks.map((link) => (
-                        <Link
-                            key={link.name}
-                            href={link.href}
-                            className="text-primary/60 hover:text-primary font-semibold transition-colors text-[10px] uppercase tracking-[0.2em]"
-                        >
-                            {link.name}
+        <AnimatePresence>
+            {isVisible && (
+                <motion.nav
+                    initial={{ y: -100, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    transition={{ duration: 0.4, ease: "easeOut" }}
+                    className={`fixed top-0 left-0 w-full z-[100] transition-all duration-500 ${scrolled ? "py-2 bg-white/80 backdrop-blur-xl border-b border-black/5" : "py-4 bg-transparent"
+                        }`}
+                >
+                    <div className="max-w-7xl mx-auto px-8 flex items-center justify-between">
+                        {/* Logo */}
+                        <Link href="/" className="group flex items-center">
+                            <div className="relative h-10 w-36 overflow-hidden">
+                                <Image
+                                    src="/logo.png"
+                                    alt="Summit 2027"
+                                    fill
+                                    className="object-contain"
+                                />
+                            </div>
                         </Link>
-                    ))}
-                </div>
 
-                {/* CTA Button */}
-                <div className="flex items-center">
-                    <button className="btn-primary !px-6 !py-2.5 md:!px-8 md:!py-3 !text-[9px] md:!text-[10px] uppercase tracking-widest whitespace-nowrap shadow-xl shadow-primary/20">
-                        Apply Now
-                    </button>
-                </div>
-            </div>
-        </motion.nav>
+                        {/* Desktop Menu */}
+                        <div className="hidden md:flex items-center gap-8 bg-primary backdrop-blur-xl px-10 py-3 rounded-full border border-black/5 shadow-[0_8px_32px_rgba(0,0,0,0.05)]">
+                            {navLinks.map((link) => (
+                                <Link
+                                    key={link.name}
+                                    href={link.href}
+                                    className="text-white hover:text-white/80 font-semibold transition-colors text-[10px] uppercase tracking-[0.2em]"
+                                >
+                                    {link.name}
+                                </Link>
+                            ))}
+                        </div>
+
+                        {/* CTA Button */}
+                        <div className="flex items-center">
+                            <button className="btn-primary !px-6 !py-2.5 md:!px-8 md:!py-3 !text-[9px] md:!text-[10px] uppercase tracking-widest whitespace-nowrap shadow-xl shadow-primary/20">
+                                Apply Now
+                            </button>
+                        </div>
+                    </div>
+                </motion.nav>
+            )}
+        </AnimatePresence>
     );
 };
 
