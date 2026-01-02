@@ -1,215 +1,202 @@
 "use client";
 
-import React, { useEffect, useRef } from "react";
-import gsap from "gsap";
-import { useGSAP } from "@gsap/react";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import SplitType from "split-type";
+import React, { useState, useEffect, useCallback } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 
-gsap.registerPlugin(ScrollTrigger);
+// Carousel slides data
+const slides = [
+    {
+        id: 1,
+        image: "https://images.pexels.com/photos/2774556/pexels-photo-2774556.jpeg",
+        title: "Summit 2027",
+        subtitle: "Where Leaders Converge",
+        description: "Join the most influential business leaders and innovators for an unforgettable experience.",
+    },
+    {
+        id: 2,
+        image: "https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg",
+        title: "Network",
+        subtitle: "Connect & Collaborate",
+        description: "Build meaningful connections with industry pioneers and future partners.",
+    },
+    {
+        id: 3,
+        image: "https://images.pexels.com/photos/3183197/pexels-photo-3183197.jpeg",
+        title: "Inspire",
+        subtitle: "Learn & Grow",
+        description: "Gain insights from world-class speakers and transformative workshops.",
+    },
+];
 
 const HeroSection = () => {
-    const [isVideoLoaded, setIsVideoLoaded] = React.useState(false);
+    const [currentSlide, setCurrentSlide] = useState(0);
+    const [slideDirection, setSlideDirection] = useState(1); // 1 = forward, -1 = backward
+    const [isAutoPlaying, setIsAutoPlaying] = useState(true);
 
-    // Fallback timeout - show content after 2 seconds max
-    React.useEffect(() => {
-        const timeout = setTimeout(() => {
-            setIsVideoLoaded(true);
-        }, 2000);
-        return () => clearTimeout(timeout);
+    // Auto-advance slides
+    useEffect(() => {
+        if (!isAutoPlaying) return;
+
+        const interval = setInterval(() => {
+            setSlideDirection(1);
+            setCurrentSlide((prev) => (prev + 1) % slides.length);
+        }, 5000);
+
+        return () => clearInterval(interval);
+    }, [isAutoPlaying]);
+
+    // Dispatch event for NavBar visibility
+    useEffect(() => {
+        window.dispatchEvent(new CustomEvent('heroAnimationComplete'));
     }, []);
-    const hasAnimated = useRef(false);
-    const sectionRef = useRef<HTMLElement>(null);
-    const videoContainerRef = useRef<HTMLDivElement>(null);
-    const videoRef = useRef<HTMLVideoElement>(null);
-    const contentRef = useRef<HTMLDivElement>(null);
-    const headingRef = useRef<HTMLHeadingElement>(null);
-    const subheadingRef = useRef<HTMLParagraphElement>(null);
-    const ctaRef = useRef<HTMLDivElement>(null);
 
-    useGSAP(
-        () => {
-            // Prevent animation from running more than once
-            if (!isVideoLoaded || hasAnimated.current) return;
-            hasAnimated.current = true;
+    const goToSlide = useCallback((index: number) => {
+        setSlideDirection(index > currentSlide ? 1 : -1);
+        setCurrentSlide(index);
+        setIsAutoPlaying(false);
+        // Resume auto-play after 10 seconds
+        setTimeout(() => setIsAutoPlaying(true), 10000);
+    }, [currentSlide]);
 
-            // Initialize SplitType for the heading
-            const splitHeading = new SplitType(headingRef.current!, { types: "chars,words" });
+    const nextSlide = useCallback(() => {
+        setSlideDirection(1);
+        setCurrentSlide((prev) => (prev + 1) % slides.length);
+    }, []);
 
-            // Set initial states
-            gsap.set(videoContainerRef.current, {
-                position: "fixed",
-                inset: 0,
-                zIndex: 50,
-                clipPath: "inset(0% 0% 0% 0% round 0px)",
-            });
+    const prevSlide = useCallback(() => {
+        setSlideDirection(-1);
+        setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
+    }, []);
 
-            gsap.set(splitHeading.chars, {
-                y: 100,
-                opacity: 0,
-                rotateX: -90,
-            });
-
-            gsap.set([subheadingRef.current, ctaRef.current], {
-                opacity: 0,
-                y: 20,
-            });
-
-            const tl = gsap.timeline();
-
-            // 0. Initial delay after video is ready (Splash feel)
-            tl.to({}, { duration: 1 });
-
-            // 1. Transform Video Container (Morphing + Scale Down)
-            const isMobile = window.innerWidth < 768;
-            const clipPathValue = isMobile
-                ? "inset(8% 8% 38% 8% round 24px)"
-                : "inset(10% 10% 45% 10% round 30px)";
-
-            tl.to(videoContainerRef.current, {
-                clipPath: clipPathValue,
-                y: 10,
-                duration: 1.5,
-                ease: "power2.inOut",
-                onComplete: () => {
-                    gsap.set(videoContainerRef.current, {
-                        position: "absolute",
-                        zIndex: 0,
-                    });
-                }
-            });
-
-            // 2. Animate Heading (NavBar appears at the same time)
-            tl.to(
-                splitHeading.chars,
-                {
-                    y: 0,
-                    opacity: 1,
-                    rotateX: 0,
-                    duration: 1,
-                    stagger: 0.02,
-                    ease: "power4.out",
-                    onStart: () => {
-                        // Dispatch custom event to show NavBar when text starts
-                        window.dispatchEvent(new CustomEvent('heroAnimationComplete'));
-                    }
-                },
-                "-=0.6"
-            );
-
-            // 3. Animate Subheading and CTA
-            tl.to(
-                [subheadingRef.current, ctaRef.current],
-                {
-                    opacity: 1,
-                    y: 0,
-                    duration: 1,
-                    stagger: 0.2,
-                    ease: "power3.out",
-                },
-                "-=0.5"
-            );
-
-            // Parallax
-            gsap.to(videoRef.current, {
-                scrollTrigger: {
-                    trigger: sectionRef.current,
-                    start: "top top",
-                    end: "bottom top",
-                    scrub: true,
-                },
-                y: 50,
-            });
+    // Slide animation variants
+    const slideVariants = {
+        enter: (direction: number) => ({
+            x: direction > 0 ? "100%" : "-100%",
+            opacity: 0,
+        }),
+        center: {
+            x: 0,
+            opacity: 1,
         },
-        { scope: sectionRef, dependencies: [isVideoLoaded] }
-    );
+        exit: (direction: number) => ({
+            x: direction > 0 ? "-100%" : "100%",
+            opacity: 0,
+        }),
+    };
 
     return (
-        <section
-            ref={sectionRef}
-            className="relative w-full h-[100svh] bg-white overflow-hidden flex flex-col items-center justify-end pb-8 md:pb-20"
-        >
-            {/* Loading Overlay */}
-            {!isVideoLoaded && (
-                <div className="fixed inset-0 z-[100] bg-white flex flex-col items-center justify-center">
-                    {/* Logo in the center */}
-                    <div className="relative h-12 w-48 overflow-hidden mb-12 animate-pulse">
+        <section className="relative w-full h-[calc(100svh-64px)] mt-[64px] bg-white overflow-hidden">
+            {/* Carousel Container */}
+            <div className="absolute inset-0">
+                <AnimatePresence initial={false} custom={slideDirection} mode="popLayout">
+                    <motion.div
+                        key={currentSlide}
+                        custom={slideDirection}
+                        variants={slideVariants}
+                        initial="enter"
+                        animate="center"
+                        exit="exit"
+                        transition={{ duration: 0.6, ease: [0.4, 0, 0.2, 1] }}
+                        className="absolute inset-0"
+                    >
+                        {/* Background Image */}
                         <Image
-                            src="/logo.png"
-                            alt="Executives Collaboration"
+                            src={slides[currentSlide].image}
+                            alt={slides[currentSlide].title}
                             fill
-                            className="object-contain"
+                            className="object-cover"
+                            priority
+                            sizes="100vw"
                         />
-                    </div>
+                        {/* Gradient Overlay */}
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-black/20" />
+                        <div className="absolute inset-0 bg-gradient-to-r from-black/50 to-transparent" />
+                    </motion.div>
+                </AnimatePresence>
+            </div>
 
-                    {/* 3 dots loading at the bottom */}
-                    <div className="absolute bottom-16 flex gap-1.5">
-                        <div className="w-1.5 h-1.5 rounded-full bg-primary/40 animate-bounce [animation-delay:-0.3s]" />
-                        <div className="w-1.5 h-1.5 rounded-full bg-primary/40 animate-bounce [animation-delay:-0.15s]" />
-                        <div className="w-1.5 h-1.5 rounded-full bg-primary/40 animate-bounce" />
+            {/* Content */}
+            <div className="relative z-10 h-full flex flex-col justify-end pb-16 md:pb-24 lg:pb-32">
+                <div className="max-w-7xl mx-auto px-6 md:px-8 w-full">
+
+
+                    {/* Slide Navigation */}
+                    <div className="flex items-center gap-6 mt-12">
+                        {/* Slide Indicators */}
+                        <div className="flex gap-2">
+                            {slides.map((_, index) => (
+                                <button
+                                    key={index}
+                                    onClick={() => goToSlide(index)}
+                                    className={`relative h-1 rounded-full transition-all duration-500 overflow-hidden ${index === currentSlide ? "w-12 bg-white" : "w-6 bg-white/30 hover:bg-white/50"
+                                        }`}
+                                    aria-label={`Go to slide ${index + 1}`}
+                                >
+                                    {index === currentSlide && isAutoPlaying && (
+                                        <motion.div
+                                            initial={{ scaleX: 0 }}
+                                            animate={{ scaleX: 1 }}
+                                            transition={{ duration: 5, ease: "linear" }}
+                                            className="absolute inset-0 bg-primary origin-left"
+                                        />
+                                    )}
+                                </button>
+                            ))}
+                        </div>
+
+                        {/* Arrow Controls */}
+                        <div className="flex gap-2 ml-auto">
+                            <button
+                                onClick={prevSlide}
+                                className="w-12 h-12 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 flex items-center justify-center text-white hover:bg-white/20 transition-all duration-300"
+                                aria-label="Previous slide"
+                            >
+                                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+                                </svg>
+                            </button>
+                            <button
+                                onClick={nextSlide}
+                                className="w-12 h-12 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 flex items-center justify-center text-white hover:bg-white/20 transition-all duration-300"
+                                aria-label="Next slide"
+                            >
+                                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+                                </svg>
+                            </button>
+                        </div>
                     </div>
                 </div>
-            )}
+            </div>
 
-            {/* Video Container */}
-            <div
-                ref={videoContainerRef}
-                className={`w-full h-full overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.1)] transition-opacity duration-700 ${isVideoLoaded ? 'opacity-100' : 'opacity-0'}`}
+            {/* Slide Counter */}
+            <div className="absolute top-1/2 right-6 md:right-12 -translate-y-1/2 z-10 hidden lg:flex flex-col items-center gap-4">
+                <span className="text-white/60 text-sm font-mono">
+                    {String(currentSlide + 1).padStart(2, "0")}
+                </span>
+                <div className="w-px h-16 bg-white/20" />
+                <span className="text-white/40 text-sm font-mono">
+                    {String(slides.length).padStart(2, "0")}
+                </span>
+            </div>
+
+            {/* Scroll Indicator */}
+            <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 1, duration: 0.5 }}
+                className="absolute bottom-6 left-1/2 -translate-x-1/2 z-10 hidden md:flex flex-col items-center gap-2"
             >
-                <video
-                    ref={videoRef}
-                    className="w-full h-full object-cover scale-110"
-                    autoPlay
-                    muted
-                    loop
-                    playsInline
-                    poster="/images/hero-bg.png"
-                    onLoadedMetadata={() => setIsVideoLoaded(true)}
+                <span className="text-white/60 text-xs tracking-widest uppercase">Scroll</span>
+                <motion.div
+                    animate={{ y: [0, 8, 0] }}
+                    transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+                    className="w-5 h-8 rounded-full border-2 border-white/30 flex items-start justify-center pt-1.5"
                 >
-                    <source
-                        src="/videos/hero.mp4"
-                        type="video/mp4"
-                    />
-                </video>
-                <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/40 pointer-events-none" />
-            </div>
-
-            {/* Hero Content */}
-            <div
-                ref={contentRef}
-                className={`relative z-20 w-full max-w-7xl px-6 md:px-8 flex flex-col md:flex-row items-center md:items-end justify-between gap-4 md:gap-8 ${!isVideoLoaded ? 'invisible' : ''}`}
-            >
-                <div className="w-full md:flex-1 text-center md:text-left">
-                    <h1
-                        ref={headingRef}
-                        className="text-primary text-5xl sm:text-6xl md:text-[8rem] font-bold leading-[0.85] tracking-tighter uppercase overflow-hidden"
-                    >
-                        Summit <br />
-                        2027
-                    </h1>
-                </div>
-
-                <div className="w-full md:flex-1 flex flex-col items-center md:items-end gap-4 md:gap-8 max-w-md">
-                    <p
-                        ref={subheadingRef}
-                        className="text-black text-base sm:text-lg md:text-xl leading-relaxed font-sans text-center md:text-right opacity-0"
-                    >
-                        A converge of minds where technology meets human intuition.
-                        Designing the next epoch of digital existence.
-                    </p>
-                    <div ref={ctaRef} className="flex flex-row gap-3 sm:gap-4 opacity-0">
-                        <a
-                            href="https://summitawards2026.executivescollaboration.com/#/summit2027"
-                            className="btn-primary !px-6 !py-3 sm:!px-8 md:!px-10 md:!py-4 !text-xs sm:!text-sm"
-                        >
-                            Apply Now
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 -z-1 w-[200vw] h-[200vw] bg-neutral-50 rounded-full" />
+                    <div className="w-1 h-2 bg-white/60 rounded-full" />
+                </motion.div>
+            </motion.div>
         </section>
     );
 };

@@ -33,30 +33,24 @@ const NavBar = () => {
     ];
 
     return (
-        <AnimatePresence>
-            {isVisible && (
-                <motion.nav
-                    initial={{ y: -100, opacity: 0 }}
-                    animate={{ y: 0, opacity: 1 }}
-                    transition={{ duration: 0.4, ease: "easeOut" }}
-                    className={`fixed top-0 left-0 w-full z-[100] transition-all duration-500 ${scrolled ? "py-2 bg-white/80 backdrop-blur-xl border-b border-black/5" : "py-4 bg-transparent"
-                        }`}
-                >
-                    <div className="max-w-7xl mx-auto px-8 flex items-center justify-between">
-                        {/* Logo */}
-                        <Link href="/" className="group flex items-center">
-                            <div className="relative h-10 w-36 overflow-hidden">
-                                <Image
-                                    src="/logo.png"
-                                    alt="Summit 2027"
-                                    fill
-                                    className="object-contain"
-                                />
-                            </div>
-                        </Link>
+        <nav
+            className={`fixed top-0 left-0 w-full z-[100] transition-all duration-500 py-3 bg-white border-b border-black/5`}
+        >
+            <div className="max-w-7xl mx-auto px-8 flex items-center justify-between">
+                {/* Logo */}
+                <Link href="/" className="group flex items-center">
+                    <div className="relative h-10 w-36 overflow-hidden">
+                        <Image
+                            src="/logo.png"
+                            alt="Summit 2027"
+                            fill
+                            className="object-contain"
+                        />
+                    </div>
+                </Link>
 
-                        {/* Desktop Menu */}
-                        {/* <div className="hidden md:flex items-center gap-8 bg-primary backdrop-blur-xl px-10 py-3 rounded-full border border-black/5 shadow-[0_8px_32px_rgba(0,0,0,0.05)]">
+                {/* Desktop Menu */}
+                {/* <div className="hidden md:flex items-center gap-8 bg-primary backdrop-blur-xl px-10 py-3 rounded-full border border-black/5 shadow-[0_8px_32px_rgba(0,0,0,0.05)]">
                             {navLinks.map((link) => (
                                 <Link
                                     key={link.name}
@@ -68,19 +62,17 @@ const NavBar = () => {
                             ))}
                         </div> */}
 
-                        {/* CTA Button */}
-                        <div className="flex items-center">
-                            <a
-                                href="https://summitawards2026.executivescollaboration.com/#/summit2027"
-                                className="btn-primary !px-6 !py-2.5 md:!px-8 md:!py-3 !text-[9px] md:!text-[10px] uppercase tracking-widest whitespace-nowrap shadow-xl shadow-primary/20"
-                            >
-                                Apply Now
-                            </a>
-                        </div>
-                    </div>
-                </motion.nav>
-            )}
-        </AnimatePresence>
+                {/* CTA Button */}
+                <div className="flex items-center">
+                    <a
+                        href="#tickets"
+                        className="btn-primary !px-6 !py-2.5 md:!px-8 md:!py-3 !text-[9px] md:!text-[10px] uppercase tracking-widest whitespace-nowrap shadow-xl shadow-primary/20"
+                    >
+                        Apply Now
+                    </a>
+                </div>
+            </div>
+        </nav>
     );
 };
 
