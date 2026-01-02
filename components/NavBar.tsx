@@ -26,10 +26,10 @@ const NavBar = () => {
     }, []);
 
     const navLinks = [
-        { name: "Program", href: "#" },
+        { name: "About", href: "#about" },
         { name: "Speakers", href: "#speakers" },
-        { name: "Venue", href: "#" },
-        { name: "FAQ", href: "#" },
+        { name: "Gallery", href: "#gallery" },
+        { name: "Tickets", href: "#tickets" },
     ];
 
     const handleScroll = (e: React.MouseEvent<HTMLAnchorElement | HTMLButtonElement>, href: string) => {
@@ -67,7 +67,7 @@ const NavBar = () => {
                 </Link>
 
                 {/* Desktop Menu */}
-                <div className="hidden md:flex items-center gap-8 bg-primary backdrop-blur-xl px-10 py-3 rounded-full border border-black/5 shadow-[0_8px_32px_rgba(0,0,0,0.05)]">
+                {/* <div className="hidden md:flex items-center gap-8 bg-primary backdrop-blur-xl px-10 py-3 rounded-full border border-black/5 shadow-[0_8px_32px_rgba(0,0,0,0.05)]">
                     {navLinks.map((link) => (
                         <a
                             key={link.name}
@@ -78,7 +78,7 @@ const NavBar = () => {
                             {link.name}
                         </a>
                     ))}
-                </div>
+                </div> */}
 
                 {/* CTA Button */}
                 <div className="flex items-center">

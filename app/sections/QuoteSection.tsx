@@ -22,6 +22,7 @@ function QuoteSection() {
 
     return (
         <section
+            id="about"
             ref={rootRef}
             className="quote-section"
         >

@@ -6,12 +6,24 @@ import Image from "next/image";
 export default function Footer() {
     const currentYear = new Date().getFullYear();
 
-    const columns = [
-        {
-            title: "NAVIGATE",
-            links: ["About", "Who For", "Agenda", "Tickets"],
-        },
-    ];
+    const handleScroll = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+        if (href.startsWith("#")) {
+            e.preventDefault();
+            const targetId = href.replace("#", "");
+            const elem = document.getElementById(targetId);
+
+            if ((window as any).lenis) {
+                (window as any).lenis.scrollTo(elem || href, {
+                    offset: -100,
+                    duration: 1.5,
+                });
+            } else if (elem) {
+                elem.scrollIntoView({ behavior: "smooth" });
+            }
+        }
+    };
+
+
 
     return (
         <footer className="relative overflow-hidden bg-primary text-white">
@@ -57,14 +69,20 @@ export default function Footer() {
                     <div className="lg:col-span-2">
                         <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-white/50 mb-6">NAVIGATE</p>
                         <nav className="flex flex-col gap-3">
-                            {["About", "Who For", "Agenda", "Tickets"].map((item) => (
-                                <Link
-                                    key={item}
-                                    href="#"
-                                    className="text-sm font-medium text-white/70 transition-colors hover:text-white font-sans"
+                            {[
+                                { name: "About", href: "#about" },
+                                { name: "Speakers", href: "#speakers" },
+                                { name: "Gallery", href: "#gallery" },
+                                { name: "Tickets", href: "#tickets" },
+                            ].map((item) => (
+                                <a
+                                    key={item.name}
+                                    href={item.href}
+                                    onClick={(e) => handleScroll(e, item.href)}
+                                    className="text-sm font-medium text-white/70 transition-colors hover:text-white font-sans cursor-pointer"
                                 >
-                                    {item}
-                                </Link>
+                                    {item.name}
+                                </a>
                             ))}
                         </nav>
                     </div>
