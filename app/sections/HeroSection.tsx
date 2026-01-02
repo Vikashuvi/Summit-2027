@@ -5,6 +5,7 @@ import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import SplitType from "split-type";
+import Image from "next/image";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -131,12 +132,22 @@ const HeroSection = () => {
         >
             {/* Loading Overlay */}
             {!isVideoLoaded && (
-                <div className="fixed inset-0 z-[100] bg-white flex items-center justify-center">
-                    <div className="flex flex-col items-center gap-4">
-                        <div className="w-12 h-12 border-4 border-primary/10 border-t-primary rounded-full animate-spin" />
-                        <p className="text-primary font-mono text-xs uppercase tracking-widest animate-pulse">
-                            Loading Experience...
-                        </p>
+                <div className="fixed inset-0 z-[100] bg-white flex flex-col items-center justify-center">
+                    {/* Logo in the center */}
+                    <div className="relative h-12 w-48 overflow-hidden mb-12 animate-pulse">
+                        <Image
+                            src="/logo.png"
+                            alt="Executives Collaboration"
+                            fill
+                            className="object-contain"
+                        />
+                    </div>
+
+                    {/* 3 dots loading at the bottom */}
+                    <div className="absolute bottom-16 flex gap-1.5">
+                        <div className="w-1.5 h-1.5 rounded-full bg-primary/40 animate-bounce [animation-delay:-0.3s]" />
+                        <div className="w-1.5 h-1.5 rounded-full bg-primary/40 animate-bounce [animation-delay:-0.15s]" />
+                        <div className="w-1.5 h-1.5 rounded-full bg-primary/40 animate-bounce" />
                     </div>
                 </div>
             )}
