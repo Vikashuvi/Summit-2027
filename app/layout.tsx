@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Montserrat, Playfair_Display } from "next/font/google";
 import "./globals.css";
 import SmoothScrollProvider from "@/components/SmoothScrollProvider";
-import CustomScrollbar from "@/components/CustomScrollbar";
 
 const montserrat = Montserrat({
     subsets: ["latin"],
@@ -42,7 +41,6 @@ export default function RootLayout({
             <body className={`${montserrat.variable} ${playfair.variable} antialiased`}>
                 <SmoothScrollProvider>
                     <NavBar />
-                    <CustomScrollbar />
                     {children}
                 </SmoothScrollProvider>
             </body>

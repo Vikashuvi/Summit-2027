@@ -156,70 +156,31 @@ const HeroSection = () => {
                 </AnimatePresence>
             </div>
 
-            {/* Content */}
+            {/* Content Area (empty for now, but keeping structure) */}
             <div className="relative z-10 h-full flex flex-col justify-end pb-16 md:pb-24 lg:pb-32">
                 <div className="max-w-7xl mx-auto px-6 md:px-8 w-full">
-
-
-                    {/* Slide Navigation */}
-                    <div className="flex items-center gap-6 mt-12">
-                        {/* Slide Indicators */}
-                        <div className="flex gap-2">
-                            {slides.map((_, index) => (
-                                <button
-                                    key={index}
-                                    onClick={() => goToSlide(index)}
-                                    className={`relative h-1 rounded-full transition-all duration-500 overflow-hidden ${index === currentSlide ? "w-12 bg-white" : "w-6 bg-white/30 hover:bg-white/50"
-                                        }`}
-                                    aria-label={`Go to slide ${index + 1}`}
-                                >
-                                    {index === currentSlide && isAutoPlaying && (
-                                        <motion.div
-                                            initial={{ scaleX: 0 }}
-                                            animate={{ scaleX: 1 }}
-                                            transition={{ duration: 5, ease: "linear" }}
-                                            className="absolute inset-0 bg-primary origin-left"
-                                        />
-                                    )}
-                                </button>
-                            ))}
-                        </div>
-
-                        {/* Arrow Controls */}
-                        <div className="flex gap-2 ml-auto">
-                            <button
-                                onClick={prevSlide}
-                                className="w-12 h-12 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 flex items-center justify-center text-white hover:bg-white/20 transition-all duration-300"
-                                aria-label="Previous slide"
-                            >
-                                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                                    <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
-                                </svg>
-                            </button>
-                            <button
-                                onClick={nextSlide}
-                                className="w-12 h-12 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 flex items-center justify-center text-white hover:bg-white/20 transition-all duration-300"
-                                aria-label="Next slide"
-                            >
-                                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
-                                </svg>
-                            </button>
-                        </div>
-                    </div>
                 </div>
             </div>
 
-            {/* Slide Counter */}
-            <div className="absolute top-1/2 right-6 md:right-12 -translate-y-1/2 z-10 hidden lg:flex flex-col items-center gap-4">
-                <span className="text-white/60 text-sm font-mono">
-                    {String(currentSlide + 1).padStart(2, "0")}
-                </span>
-                <div className="w-px h-16 bg-white/20" />
-                <span className="text-white/40 text-sm font-mono">
-                    {String(slides.length).padStart(2, "0")}
-                </span>
-            </div>
+            {/* Arrow Controls */}
+            <button
+                onClick={prevSlide}
+                className="absolute left-4 md:left-8 top-1/2 -translate-y-1/2 z-20 w-12 h-12 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 flex items-center justify-center text-white hover:bg-white/20 transition-all duration-300"
+                aria-label="Previous slide"
+            >
+                <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+                </svg>
+            </button>
+            <button
+                onClick={nextSlide}
+                className="absolute right-4 md:right-8 top-1/2 -translate-y-1/2 z-20 w-12 h-12 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 flex items-center justify-center text-white hover:bg-white/20 transition-all duration-300"
+                aria-label="Next slide"
+            >
+                <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+                </svg>
+            </button>
 
             {/* Scroll Indicator */}
             <motion.div
