@@ -71,7 +71,7 @@ export default function Footer() {
                         <nav className="flex flex-col gap-3">
                             {[
                                 { name: "About", href: "#about" },
-                                { name: "Speakers", href: "#speakers" },
+                                { name: "Past Speakers", href: "#speakers" },
                                 { name: "Gallery", href: "#gallery" },
                                 { name: "Tickets", href: "#tickets" },
                             ].map((item) => (

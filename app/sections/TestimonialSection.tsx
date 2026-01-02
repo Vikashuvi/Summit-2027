@@ -90,7 +90,7 @@ export default function TestimonialSection() {
         <section id="speakers" ref={sectionRef} className="testimonials-section relative overflow-hidden bg-white">
             <div className="absolute top-16 left-1/2 -translate-x-1/2 z-20 w-full px-6 flex flex-col items-center justify-center text-center">
                 <h2 className="text-4xl md:text-5xl font-bold text-primary mb-4 uppercase tracking-tighter leading-none">
-                    Industry-Leading <br />
+                    Past Event <br />
                     <span className="text-black">Speakers</span>
                 </h2>
                 <p className="text-sm text-black max-w-lg mx-auto font-medium">

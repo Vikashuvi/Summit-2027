@@ -3,40 +3,71 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
+import { db } from "@/lib/firebase";
+import { collection, getDocs, orderBy, query } from "firebase/firestore";
 
-// Carousel slides data
-const slides = [
+interface CarouselImage {
+    id: string;
+    url: string;
+    publicId: string;
+    order: number;
+}
+
+// Fallback slides (used when no images are uploaded to Firebase)
+const fallbackSlides = [
     {
-        id: 1,
-        image: "https://images.pexels.com/photos/2774556/pexels-photo-2774556.jpeg",
-        title: "Summit 2027",
-        subtitle: "Where Leaders Converge",
-        description: "Join the most influential business leaders and innovators for an unforgettable experience.",
+        id: "fallback-1",
+        url: "https://images.pexels.com/photos/2774556/pexels-photo-2774556.jpeg",
     },
     {
-        id: 2,
-        image: "https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg",
-        title: "Network",
-        subtitle: "Connect & Collaborate",
-        description: "Build meaningful connections with industry pioneers and future partners.",
+        id: "fallback-2",
+        url: "https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg",
     },
     {
-        id: 3,
-        image: "https://images.pexels.com/photos/3183197/pexels-photo-3183197.jpeg",
-        title: "Inspire",
-        subtitle: "Learn & Grow",
-        description: "Gain insights from world-class speakers and transformative workshops.",
+        id: "fallback-3",
+        url: "https://images.pexels.com/photos/3183197/pexels-photo-3183197.jpeg",
     },
 ];
 
 const HeroSection = () => {
+    const [slides, setSlides] = useState<CarouselImage[]>(fallbackSlides as CarouselImage[]);
     const [currentSlide, setCurrentSlide] = useState(0);
     const [slideDirection, setSlideDirection] = useState(1); // 1 = forward, -1 = backward
     const [isAutoPlaying, setIsAutoPlaying] = useState(true);
+    const [isLoading, setIsLoading] = useState(true);
+
+    // Fetch carousel images from Firebase
+    useEffect(() => {
+        const fetchCarouselImages = async () => {
+            try {
+                const q = query(
+                    collection(db, "carouselImages"),
+                    orderBy("order", "asc")
+                );
+                const snapshot = await getDocs(q);
+                const images = snapshot.docs.map((doc) => ({
+                    id: doc.id,
+                    ...doc.data(),
+                })) as CarouselImage[];
+
+                // Only use Firebase images if we have some, otherwise use fallback
+                if (images.length > 0) {
+                    setSlides(images);
+                }
+            } catch (error) {
+                console.error("Error fetching carousel images:", error);
+                // Keep using fallback slides on error
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
+        fetchCarouselImages();
+    }, []);
 
     // Auto-advance slides
     useEffect(() => {
-        if (!isAutoPlaying) return;
+        if (!isAutoPlaying || slides.length === 0) return;
 
         const interval = setInterval(() => {
             setSlideDirection(1);
@@ -44,7 +75,7 @@ const HeroSection = () => {
         }, 5000);
 
         return () => clearInterval(interval);
-    }, [isAutoPlaying]);
+    }, [isAutoPlaying, slides.length]);
 
     // Dispatch event for NavBar visibility
     useEffect(() => {
@@ -62,12 +93,12 @@ const HeroSection = () => {
     const nextSlide = useCallback(() => {
         setSlideDirection(1);
         setCurrentSlide((prev) => (prev + 1) % slides.length);
-    }, []);
+    }, [slides.length]);
 
     const prevSlide = useCallback(() => {
         setSlideDirection(-1);
         setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
-    }, []);
+    }, [slides.length]);
 
     // Slide animation variants
     const slideVariants = {
@@ -85,13 +116,22 @@ const HeroSection = () => {
         }),
     };
 
+    // Show loading state
+    if (isLoading || slides.length === 0) {
+        return (
+            <section className="relative w-full h-[calc(100svh-64px)] mt-[64px] bg-slate-900 flex items-center justify-center">
+                <div className="animate-pulse text-white/50">Loading...</div>
+            </section>
+        );
+    }
+
     return (
         <section className="relative w-full h-[calc(100svh-64px)] mt-[64px] bg-white overflow-hidden">
             {/* Carousel Container */}
             <div className="absolute inset-0">
                 <AnimatePresence initial={false} custom={slideDirection} mode="popLayout">
                     <motion.div
-                        key={currentSlide}
+                        key={slides[currentSlide]?.id || currentSlide}
                         custom={slideDirection}
                         variants={slideVariants}
                         initial="enter"
@@ -102,8 +142,8 @@ const HeroSection = () => {
                     >
                         {/* Background Image */}
                         <Image
-                            src={slides[currentSlide].image}
-                            alt={slides[currentSlide].title}
+                            src={slides[currentSlide]?.url}
+                            alt={`Carousel slide ${currentSlide + 1}`}
                             fill
                             className="object-cover"
                             priority

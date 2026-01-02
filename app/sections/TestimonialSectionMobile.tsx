@@ -4,34 +4,64 @@ import React from "react";
 
 const speakers = [
     {
-        name: "Alexander Thorne",
-        role: "CEO, Alpha Dynamics",
-        image: "https://images.pexels.com/photos/2379004/pexels-photo-2379004.jpeg",
-    },
-    {
-        name: "Elena Rodriguez",
-        role: "Founder, Green Horizon",
-        image: "https://images.pexels.com/photos/3775168/pexels-photo-3775168.jpeg",
-    },
-    {
-        name: "Marcus Chen",
-        role: "Venture Capitalist",
+        name: "Dr. Chackochan Mathai",
+        role: "Founder & CEO – Franchising Rightway",
+        stat: "Impact: ₹30–40 Crores",
         image: "https://images.pexels.com/photos/2182970/pexels-photo-2182970.jpeg",
     },
     {
-        name: "Sophia Williams",
-        role: "Tech Evangelist",
-        image: "https://images.pexels.com/photos/3772506/pexels-photo-3772506.jpeg",
+        name: "Mr. Balaji Venkatrathinam",
+        role: "Founder & ED – Solidpro Group",
+        stat: "Turnover: ₹50+ Crores",
+        image: "https://images.pexels.com/photos/2379004/pexels-photo-2379004.jpeg",
     },
     {
-        name: "David Miller",
-        role: "Investment Strategist",
+        name: "Mr. Sriram Manoharan",
+        role: "Founder & CEO – Contus Tech",
+        stat: "Revenue: ₹150–200 Crores",
         image: "https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg",
     },
     {
-        name: "Isabella Knight",
-        role: "Growth Hacker",
+        name: "Ms. Aparna Thyagarajan",
+        role: "Co-Founder – Shobitam Inc",
+        stat: "D2C Online Fashion Specialist",
+        image: "https://images.pexels.com/photos/3775168/pexels-photo-3775168.jpeg",
+    },
+    {
+        name: "Mr. Kavin Kumar Kandasamy",
+        role: "CEO – ProClime",
+        stat: "Revenue: ₹200+ Crores",
+        image: "https://images.pexels.com/photos/3772506/pexels-photo-3772506.jpeg",
+    },
+    {
+        name: "Mr. G. Muralidharan",
+        role: "Managing Director – KAG India",
+        stat: "Revenue: ₹650+ Crores",
         image: "https://images.pexels.com/photos/1181686/pexels-photo-1181686.jpeg",
+    },
+    {
+        name: "Mr. Avinaash Diraviyam",
+        role: "Manager – UN World Food Programme",
+        stat: "International Project Expert",
+        image: "https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg",
+    },
+    {
+        name: "Mr. Srinivasa Bharathy",
+        role: "MD & CEO – Adrenalin eSystems",
+        stat: "HR Technology Leader",
+        image: "https://images.pexels.com/photos/3183197/pexels-photo-3183197.jpeg",
+    },
+    {
+        name: "Mr. Subburaj Thangappalam",
+        role: "Project Manager – L&T Tech",
+        stat: "Agile Excellence Lead",
+        image: "https://images.pexels.com/photos/3184433/pexels-photo-3184433.jpeg",
+    },
+    {
+        name: "Mr. Adhitya Rajasekaran",
+        role: "Founder – Auxos Global",
+        stat: "Singapore Technopreneur",
+        image: "https://images.pexels.com/photos/3184292/pexels-photo-3184292.jpeg",
     },
 ];
 
@@ -41,10 +71,10 @@ export default function TestimonialSectionMobile() {
             {/* Heading Section */}
             <div className="text-center mb-10">
                 <h2 className="text-3xl font-bold text-primary mb-2 uppercase tracking-tighter leading-tight">
-                    Summit <span className="text-light-brown">Speakers</span>
+                    Past Event <span className="text-light-brown">Speakers</span>
                 </h2>
-                <p className="text-xs text-primary/60 max-w-[280px] mx-auto font-medium">
-                    Learn from world-class executives and industry-leading experts
+                <p className="text-xs text-primary/60 max-w-[300px] mx-auto font-medium">
+                    Relive the insights from transformative leaders of our previous summits
                 </p>
             </div>
 
@@ -67,11 +97,14 @@ export default function TestimonialSectionMobile() {
 
                             {/* Bottom Info */}
                             <div className="absolute bottom-0 left-0 right-0 p-3 text-white">
-                                <h3 className="text-[11px] font-bold uppercase tracking-wide leading-tight mb-0.5">
+                                <h3 className="text-[10px] font-bold uppercase tracking-wide leading-tight mb-0.5">
                                     {speaker.name}
                                 </h3>
-                                <p className="text-[9px] text-white/70 font-sans tracking-normal line-clamp-1">
+                                <p className="text-[8px] text-white/70 font-sans tracking-normal line-clamp-1 mb-0.5">
                                     {speaker.role}
+                                </p>
+                                <p className="text-[7px] text-primary/90 font-bold tracking-wider highlight bg-white/10 px-1 py-0.5 rounded-sm line-clamp-1 w-fit">
+                                    {speaker.stat}
                                 </p>
                             </div>
                         </div>
