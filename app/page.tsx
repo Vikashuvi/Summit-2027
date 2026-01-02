@@ -2,6 +2,7 @@
 import HeroSection from "./sections/HeroSection";
 import QuoteSection from "./sections/QuoteSection";
 import GridSection from "./sections/GridSection";
+import GallerySection from "./sections/GallerySection";
 import TestimonialSection from "./sections/TestimonialSection";
 import TestimonialSectionMobile from "./sections/TestimonialSectionMobile";
 import TicketSection from "./sections/TicketSection";
@@ -33,6 +34,9 @@ export default function Home() {
 
             {/* Immersive Grid Section */}
             <GridSection />
+
+            {/* Gallery Section with Masonry Layout */}
+            <GallerySection />
 
             {/* Footer handles the final CTA and closing */}
             <Footer />
