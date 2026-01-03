@@ -30,19 +30,19 @@ const Counter = ({ value, suffix = "" }: { value: number; suffix?: string }) => 
 const stats = [
     {
         label: "Attendees",
-        value: 1560,
+        value: 200,
         suffix: "+",
         description: "Visionaries and leaders joined us globally",
     },
     {
         label: "Speakers",
-        value: 42,
+        value: 10,
         suffix: "+",
         description: "Industry titans shared their insights",
     },
     {
-        label: "Workshops",
-        value: 28,
+        label: "Panel Discussion",
+        value: 10,
         suffix: "",
         description: "Immersive learning experiences",
     },

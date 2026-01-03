@@ -247,7 +247,14 @@ const HeroSection = () => {
                         A converge of minds where technology meets human intuition. Designing the next epoch of digital existence.
                     </p>
                     <a
-                        href="https://summitawards2026.executivescollaboration.com/#/summit2027"
+                        href="#tickets"
+                        onClick={(e) => {
+                            e.preventDefault();
+                            const elem = document.getElementById('tickets');
+                            if (elem) {
+                                elem.scrollIntoView({ behavior: 'smooth' });
+                            }
+                        }}
                         className="inline-block bg-primary text-white px-8 py-3 rounded-full font-bold text-sm uppercase tracking-wider hover:bg-primary/90 transition-all active:scale-95 shadow-lg shadow-primary/20"
                     >
                         Apply Now
