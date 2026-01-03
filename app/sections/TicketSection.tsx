@@ -11,6 +11,7 @@ const passes = [
         price: "3,500",
         originalPrice: null,
         badge: "Limited Time",
+        deadline: "Valid until June 30, 2026",
         badgeColor: "bg-emerald-500",
         features: [
             "Full event access",
@@ -145,9 +146,16 @@ const TicketSection = () => {
                                         </span>
                                     )}
                                 </div>
-                                <p className={`text-sm mt-2 font-sans ${pass.isHighlighted ? 'text-white/70' : 'text-gray-500'}`}>
-                                    Per person • Inclusive of all taxes
-                                </p>
+                                <div className="flex flex-col gap-1 mt-2">
+                                    <p className={`text-sm font-sans ${pass.isHighlighted ? 'text-white/70' : 'text-gray-500'}`}>
+                                        Per person • Inclusive of all taxes
+                                    </p>
+                                    {(pass as any).deadline && (
+                                        <p className={`text-[11px] font-bold uppercase tracking-wider ${pass.id === 'early-bird' ? 'text-emerald-600' : 'text-gray-400'}`}>
+                                            {(pass as any).deadline}
+                                        </p>
+                                    )}
+                                </div>
                             </div>
 
                             {/* Features */}

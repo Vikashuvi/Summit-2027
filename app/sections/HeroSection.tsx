@@ -240,9 +240,14 @@ const HeroSection = () => {
 
                 {/* Text Content Below Carousel */}
                 <div className="px-6 py-6 bg-transparent text-center flex-shrink-0 relative z-10">
-                    <h1 className="text-primary text-3xl sm:text-4xl font-bold tracking-tighter uppercase leading-tight mb-3">
+                    <h1 className="text-primary text-3xl sm:text-4xl font-bold tracking-tighter uppercase leading-tight mb-2">
                         Millionaire Summit 2027
                     </h1>
+                    <div className="inline-block px-4 py-1.5 bg-primary/5 border border-primary/10 rounded-full mb-4">
+                        <p className="text-primary text-[10px] sm:text-xs font-bold uppercase tracking-[0.2em]">
+                            Saturday, Jan 9, 2027
+                        </p>
+                    </div>
                     <p className="text-slate-600 text-sm sm:text-base leading-relaxed mb-5 max-w-md mx-auto">
                         A converge of minds where technology meets human intuition. Designing the next epoch of digital existence.
                     </p>
