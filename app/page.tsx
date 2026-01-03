@@ -2,7 +2,6 @@
 import HeroSection from "./sections/HeroSection";
 import QuoteSection from "./sections/QuoteSection";
 import StatsSection from "./sections/StatsSection";
-import PastSpeakersSection from "./sections/PastSpeakersSection";
 import GridSection from "./sections/GridSection";
 import GallerySection from "./sections/GallerySection";
 import TestimonialSection from "./sections/TestimonialSection";
@@ -22,9 +21,6 @@ export default function Home() {
 
             {/* Impact & Success Stats from 2026 */}
             <StatsSection />
-
-            {/* Past Event Speakers Showcase */}
-            <PastSpeakersSection />
 
 
             {/* Desktop Testimonial Section */}

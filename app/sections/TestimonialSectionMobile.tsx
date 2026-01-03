@@ -1,71 +1,126 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect, useCallback } from "react";
+import { db } from "@/lib/firebase";
+import { collection, getDocs, orderBy, query } from "firebase/firestore";
+import { Loader2 } from "lucide-react";
 
-const speakers = [
+// Hardcoded speaker data - only images will be dynamic
+const speakerData = [
     {
         name: "Dr. Chackochan Mathai",
         role: "Founder & CEO – Franchising Rightway",
         stat: "Impact: ₹30–40 Crores",
-        image: "https://images.pexels.com/photos/2182970/pexels-photo-2182970.jpeg",
+        fallbackImage: "https://images.pexels.com/photos/2182970/pexels-photo-2182970.jpeg",
     },
     {
         name: "Mr. Balaji Venkatrathinam",
         role: "Founder & ED – Solidpro Group",
         stat: "Turnover: ₹50+ Crores",
-        image: "https://images.pexels.com/photos/2379004/pexels-photo-2379004.jpeg",
+        fallbackImage: "https://images.pexels.com/photos/2379004/pexels-photo-2379004.jpeg",
     },
     {
         name: "Mr. Sriram Manoharan",
         role: "Founder & CEO – Contus Tech",
         stat: "Revenue: ₹150–200 Crores",
-        image: "https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg",
+        fallbackImage: "https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg",
     },
     {
         name: "Ms. Aparna Thyagarajan",
         role: "Co-Founder – Shobitam Inc",
         stat: "D2C Online Fashion Specialist",
-        image: "https://images.pexels.com/photos/3775168/pexels-photo-3775168.jpeg",
+        fallbackImage: "https://images.pexels.com/photos/3775168/pexels-photo-3775168.jpeg",
     },
     {
         name: "Mr. Kavin Kumar Kandasamy",
         role: "CEO – ProClime",
         stat: "Revenue: ₹200+ Crores",
-        image: "https://images.pexels.com/photos/3772506/pexels-photo-3772506.jpeg",
+        fallbackImage: "https://images.pexels.com/photos/3772506/pexels-photo-3772506.jpeg",
     },
     {
         name: "Mr. G. Muralidharan",
         role: "Managing Director – KAG India",
         stat: "Revenue: ₹650+ Crores",
-        image: "https://images.pexels.com/photos/1181686/pexels-photo-1181686.jpeg",
+        fallbackImage: "https://images.pexels.com/photos/1181686/pexels-photo-1181686.jpeg",
     },
     {
         name: "Mr. Avinaash Diraviyam",
         role: "Manager – UN World Food Programme",
         stat: "International Project Expert",
-        image: "https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg",
+        fallbackImage: "https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg",
     },
     {
         name: "Mr. Srinivasa Bharathy",
         role: "MD & CEO – Adrenalin eSystems",
         stat: "HR Technology Leader",
-        image: "https://images.pexels.com/photos/3183197/pexels-photo-3183197.jpeg",
+        fallbackImage: "https://images.pexels.com/photos/3183197/pexels-photo-3183197.jpeg",
     },
     {
         name: "Mr. Subburaj Thangappalam",
         role: "Project Manager – L&T Tech",
         stat: "Agile Excellence Lead",
-        image: "https://images.pexels.com/photos/3184433/pexels-photo-3184433.jpeg",
+        fallbackImage: "https://images.pexels.com/photos/3184433/pexels-photo-3184433.jpeg",
     },
     {
         name: "Mr. Adhitya Rajasekaran",
         role: "Founder – Auxos Global",
         stat: "Singapore Technopreneur",
-        image: "https://images.pexels.com/photos/3184292/pexels-photo-3184292.jpeg",
+        fallbackImage: "https://images.pexels.com/photos/3184292/pexels-photo-3184292.jpeg",
     },
 ];
 
+interface SpeakerImage {
+    id: string;
+    imageUrl: string;
+    order: number;
+}
+
 export default function TestimonialSectionMobile() {
+    const [speakerImages, setSpeakerImages] = useState<string[]>([]);
+    const [isLoading, setIsLoading] = useState(true);
+
+    // Fetch speaker images from Firebase (only images, ordered by position)
+    const fetchSpeakerImages = useCallback(async () => {
+        try {
+            const q = query(
+                collection(db, "speakers"),
+                orderBy("order", "asc")
+            );
+            const snapshot = await getDocs(q);
+            const images = snapshot.docs.map((doc) => {
+                const data = doc.data() as SpeakerImage;
+                return data.imageUrl;
+            });
+
+            setSpeakerImages(images);
+        } catch (error) {
+            console.error("Error fetching speaker images:", error);
+        } finally {
+            setIsLoading(false);
+        }
+    }, []);
+
+    useEffect(() => {
+        fetchSpeakerImages();
+    }, [fetchSpeakerImages]);
+
+    // Combine hardcoded data with dynamic images
+    const speakers = speakerData.map((speaker, index) => ({
+        ...speaker,
+        // Use uploaded image if available, otherwise use fallback
+        image: speakerImages[index] || speaker.fallbackImage,
+    }));
+
+    if (isLoading) {
+        return (
+            <section id="speakers" className="relative bg-white py-16 px-4">
+                <div className="flex items-center justify-center py-20">
+                    <Loader2 className="w-8 h-8 text-primary animate-spin" />
+                </div>
+            </section>
+        );
+    }
+
     return (
         <section id="speakers" className="relative bg-white py-16 px-4">
             {/* Heading Section */}

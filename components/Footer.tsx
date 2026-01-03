@@ -72,17 +72,27 @@ export default function Footer() {
                             {[
                                 { name: "About", href: "#about" },
                                 { name: "Past Speakers", href: "#speakers" },
-                                { name: "Gallery", href: "#gallery" },
+                                { name: "Gallery", href: "/gallery" },
                                 { name: "Tickets", href: "#tickets" },
                             ].map((item) => (
-                                <a
-                                    key={item.name}
-                                    href={item.href}
-                                    onClick={(e) => handleScroll(e, item.href)}
-                                    className="text-sm font-medium text-white/70 transition-colors hover:text-white font-sans cursor-pointer"
-                                >
-                                    {item.name}
-                                </a>
+                                item.href.startsWith("#") ? (
+                                    <a
+                                        key={item.name}
+                                        href={item.href}
+                                        onClick={(e) => handleScroll(e, item.href)}
+                                        className="text-sm font-medium text-white/70 transition-colors hover:text-white font-sans cursor-pointer"
+                                    >
+                                        {item.name}
+                                    </a>
+                                ) : (
+                                    <Link
+                                        key={item.name}
+                                        href={item.href}
+                                        className="text-sm font-medium text-white/70 transition-colors hover:text-white font-sans cursor-pointer"
+                                    >
+                                        {item.name}
+                                    </Link>
+                                )
                             ))}
                         </nav>
                     </div>

@@ -1,50 +1,114 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { db } from "@/lib/firebase";
 import { collection, getDocs, orderBy, query } from "firebase/firestore";
+import { Loader2 } from "lucide-react";
 
-interface Speaker {
+// Hardcoded speaker data - only images will be dynamic
+const speakerData = [
+    {
+        name: "Dr. Chackochan Mathai",
+        title: "Founder & CEO",
+        company: "Franchising Rightway",
+        fallbackImage: "https://images.pexels.com/photos/2182970/pexels-photo-2182970.jpeg",
+    },
+    {
+        name: "Mr. Balaji Venkatrathinam",
+        title: "Founder & ED",
+        company: "Solidpro Group",
+        fallbackImage: "https://images.pexels.com/photos/2379004/pexels-photo-2379004.jpeg",
+    },
+    {
+        name: "Mr. Sriram Manoharan",
+        title: "Founder & CEO",
+        company: "Contus Tech",
+        fallbackImage: "https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg",
+    },
+    {
+        name: "Ms. Aparna Thyagarajan",
+        title: "Co-Founder",
+        company: "Shobitam Inc",
+        fallbackImage: "https://images.pexels.com/photos/3775168/pexels-photo-3775168.jpeg",
+    },
+    {
+        name: "Mr. Kavin Kumar Kandasamy",
+        title: "CEO",
+        company: "ProClime",
+        fallbackImage: "https://images.pexels.com/photos/3772506/pexels-photo-3772506.jpeg",
+    },
+    {
+        name: "Mr. G. Muralidharan",
+        title: "Managing Director",
+        company: "KAG India",
+        fallbackImage: "https://images.pexels.com/photos/1181686/pexels-photo-1181686.jpeg",
+    },
+    {
+        name: "Mr. Avinaash Diraviyam",
+        title: "Manager",
+        company: "UN World Food Programme",
+        fallbackImage: "https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg",
+    },
+    {
+        name: "Mr. Srinivasa Bharathy",
+        title: "MD & CEO",
+        company: "Adrenalin eSystems",
+        fallbackImage: "https://images.pexels.com/photos/3183197/pexels-photo-3183197.jpeg",
+    },
+];
+
+interface SpeakerImage {
     id: string;
-    name: string;
-    title: string;
-    company: string;
     imageUrl: string;
     order: number;
 }
 
 const PastSpeakersSection = () => {
-    const [speakers, setSpeakers] = useState<Speaker[]>([]);
+    const [speakerImages, setSpeakerImages] = useState<string[]>([]);
     const [isLoading, setIsLoading] = useState(true);
 
-    useEffect(() => {
-        const fetchSpeakers = async () => {
-            try {
-                const q = query(
-                    collection(db, "speakers"),
-                    orderBy("order", "asc")
-                );
-                const snapshot = await getDocs(q);
-                const speakersList = snapshot.docs.map((doc) => ({
-                    id: doc.id,
-                    ...doc.data(),
-                })) as Speaker[];
+    // Fetch speaker images from Firebase (only images, ordered by position)
+    const fetchSpeakerImages = useCallback(async () => {
+        try {
+            const q = query(
+                collection(db, "speakers"),
+                orderBy("order", "asc")
+            );
+            const snapshot = await getDocs(q);
+            const images = snapshot.docs.map((doc) => {
+                const data = doc.data() as SpeakerImage;
+                return data.imageUrl;
+            });
 
-                setSpeakers(speakersList);
-            } catch (error) {
-                console.error("Error fetching speakers:", error);
-            } finally {
-                setIsLoading(false);
-            }
-        };
-
-        fetchSpeakers();
+            setSpeakerImages(images);
+        } catch (error) {
+            console.error("Error fetching speaker images:", error);
+        } finally {
+            setIsLoading(false);
+        }
     }, []);
 
-    if (isLoading || speakers.length === 0) {
-        return null; // Don't show the section if it's loading or empty
+    useEffect(() => {
+        fetchSpeakerImages();
+    }, [fetchSpeakerImages]);
+
+    // Combine hardcoded data with dynamic images
+    const speakers = speakerData.map((speaker, index) => ({
+        ...speaker,
+        // Use uploaded image if available, otherwise use fallback
+        imageUrl: speakerImages[index] || speaker.fallbackImage,
+    }));
+
+    if (isLoading) {
+        return (
+            <section id="speakers" className="relative py-24 bg-white overflow-hidden">
+                <div className="flex items-center justify-center py-20">
+                    <Loader2 className="w-10 h-10 text-primary animate-spin" />
+                </div>
+            </section>
+        );
     }
 
     return (
@@ -65,7 +129,7 @@ const PastSpeakersSection = () => {
                         </span>
                     </h2>
                     <p className="max-w-2xl mx-auto text-lg text-slate-600">
-                        Join the ranks of these visionary leaders who have graced our stage and inspired thousands with their transformative insights.
+                        Relive the insights from transformative leaders of our previous summits who have inspired thousands with their visionary perspectives.
                     </p>
                 </motion.div>
 
@@ -73,7 +137,7 @@ const PastSpeakersSection = () => {
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
                     {speakers.map((speaker, index) => (
                         <motion.div
-                            key={speaker.id}
+                            key={index}
                             initial={{ opacity: 0, y: 30 }}
                             whileInView={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.5, delay: index * 0.1 }}

@@ -45,12 +45,23 @@ interface Speaker {
     createdAt: Date;
 }
 
-type TabType = "carousel" | "speakers";
+interface GalleryImage {
+    id: string;
+    url: string;
+    publicId: string;
+    width: number;
+    height: number;
+    order: number;
+    createdAt: Date;
+}
+
+type TabType = "carousel" | "speakers" | "gallery";
 
 export default function UploadPage() {
     const [activeTab, setActiveTab] = useState<TabType>("carousel");
     const [carouselImages, setCarouselImages] = useState<CarouselImage[]>([]);
     const [speakers, setSpeakers] = useState<Speaker[]>([]);
+    const [galleryImages, setGalleryImages] = useState<GalleryImage[]>([]);
     const [isUploading, setIsUploading] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
     const [editingSpeaker, setEditingSpeaker] = useState<string | null>(null);
@@ -93,17 +104,35 @@ export default function UploadPage() {
         }
     }, []);
 
+    const fetchGalleryImages = useCallback(async () => {
+        try {
+            const q = query(
+                collection(db, "galleryImages"),
+                orderBy("order", "asc")
+            );
+            const snapshot = await getDocs(q);
+            const images = snapshot.docs.map((doc) => ({
+                id: doc.id,
+                ...doc.data(),
+            })) as GalleryImage[];
+            setGalleryImages(images);
+        } catch (error) {
+            console.error("Error fetching gallery images:", error);
+        }
+    }, []);
+
     useEffect(() => {
         fetchCarouselImages();
         fetchSpeakers();
+        fetchGalleryImages();
         setIsLoading(false);
-    }, [fetchCarouselImages, fetchSpeakers]);
+    }, [fetchCarouselImages, fetchSpeakers, fetchGalleryImages]);
 
     // Upload image to Cloudinary
     const uploadToCloudinary = async (
         file: File,
         folder: string
-    ): Promise<{ url: string; publicId: string } | null> => {
+    ): Promise<{ url: string; publicId: string; width: number; height: number } | null> => {
         const formData = new FormData();
         formData.append("file", file);
         formData.append("folder", folder);
@@ -117,7 +146,12 @@ export default function UploadPage() {
             if (!response.ok) throw new Error("Upload failed");
 
             const data = await response.json();
-            return { url: data.url, publicId: data.publicId };
+            return {
+                url: data.url,
+                publicId: data.publicId,
+                width: data.width || 800,
+                height: data.height || 600
+            };
         } catch (error) {
             console.error("Upload error:", error);
             return null;
@@ -241,6 +275,44 @@ export default function UploadPage() {
         await fetchSpeakers();
     };
 
+    // Gallery Image Handlers
+    const handleGalleryUpload = async (
+        e: React.ChangeEvent<HTMLInputElement>
+    ) => {
+        const files = e.target.files;
+        if (!files || files.length === 0) return;
+
+        setIsUploading(true);
+
+        for (const file of Array.from(files)) {
+            const result = await uploadToCloudinary(file, "summit-2027/gallery");
+            if (result) {
+                await addDoc(collection(db, "galleryImages"), {
+                    url: result.url,
+                    publicId: result.publicId,
+                    width: result.width,
+                    height: result.height,
+                    order: galleryImages.length,
+                    createdAt: new Date(),
+                });
+            }
+        }
+
+        await fetchGalleryImages();
+        setIsUploading(false);
+        e.target.value = "";
+    };
+
+    const handleGalleryDelete = async (image: GalleryImage) => {
+        if (!confirm("Are you sure you want to delete this gallery image?")) return;
+
+        setIsUploading(true);
+        await deleteFromCloudinary(image.publicId);
+        await deleteDoc(doc(db, "galleryImages", image.id));
+        await fetchGalleryImages();
+        setIsUploading(false);
+    };
+
     // Drag and Drop for reordering
     const handleDragStart = (id: string) => {
         setDraggedItem(id);
@@ -250,7 +322,11 @@ export default function UploadPage() {
         e.preventDefault();
         if (draggedItem === targetId) return;
 
-        const items = activeTab === "carousel" ? carouselImages : speakers;
+        const items = activeTab === "carousel"
+            ? carouselImages
+            : activeTab === "speakers"
+                ? speakers
+                : galleryImages;
         const draggedIndex = items.findIndex((item) => item.id === draggedItem);
         const targetIndex = items.findIndex((item) => item.id === targetId);
 
@@ -262,14 +338,24 @@ export default function UploadPage() {
 
         if (activeTab === "carousel") {
             setCarouselImages(newItems as CarouselImage[]);
-        } else {
+        } else if (activeTab === "speakers") {
             setSpeakers(newItems as Speaker[]);
+        } else {
+            setGalleryImages(newItems as GalleryImage[]);
         }
     };
 
     const handleDragEnd = async () => {
-        const items = activeTab === "carousel" ? carouselImages : speakers;
-        const collectionName = activeTab === "carousel" ? "carouselImages" : "speakers";
+        const items = activeTab === "carousel"
+            ? carouselImages
+            : activeTab === "speakers"
+                ? speakers
+                : galleryImages;
+        const collectionName = activeTab === "carousel"
+            ? "carouselImages"
+            : activeTab === "speakers"
+                ? "speakers"
+                : "galleryImages";
 
         // Update order in Firebase
         for (let i = 0; i < items.length; i++) {
@@ -299,7 +385,7 @@ export default function UploadPage() {
                 <div>
                     <h1 className="text-3xl font-bold text-white">Image Manager</h1>
                     <p className="text-slate-400 mt-1">
-                        Manage hero carousel and past event speakers
+                        Manage hero carousel, past event speakers, and event gallery
                     </p>
                 </div>
             </motion.div>
@@ -333,6 +419,19 @@ export default function UploadPage() {
                             {speakers.length}
                         </span>
                     </button>
+                    <button
+                        onClick={() => setActiveTab("gallery")}
+                        className={`flex items-center gap-2 px-6 py-3 rounded-xl font-medium transition-all ${activeTab === "gallery"
+                            ? "bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg"
+                            : "text-slate-400 hover:text-white hover:bg-white/10"
+                            }`}
+                    >
+                        <ImageIcon className="w-5 h-5" />
+                        Event Gallery
+                        <span className="bg-white/20 px-2 py-0.5 rounded-full text-sm">
+                            {galleryImages.length}
+                        </span>
+                    </button>
                 </div>
             </div>
 
@@ -356,15 +455,19 @@ export default function UploadPage() {
                             ? "Uploading..."
                             : activeTab === "carousel"
                                 ? "Add Carousel Image"
-                                : "Add Past Event Speaker"}
+                                : activeTab === "speakers"
+                                    ? "Add Past Event Speaker"
+                                    : "Add Gallery Image"}
                         <input
                             type="file"
                             accept="image/*"
-                            multiple={activeTab === "carousel"}
+                            multiple={activeTab === "carousel" || activeTab === "gallery"}
                             onChange={
                                 activeTab === "carousel"
                                     ? handleCarouselUpload
-                                    : handleSpeakerUpload
+                                    : activeTab === "speakers"
+                                        ? handleSpeakerUpload
+                                        : handleGalleryUpload
                             }
                             className="hidden"
                             disabled={isUploading}
@@ -552,6 +655,68 @@ export default function UploadPage() {
                             <div className="col-span-full flex flex-col items-center justify-center py-20 text-slate-500">
                                 <Users className="w-16 h-16 mb-4 opacity-50" />
                                 <p className="text-lg">No past event speakers yet</p>
+                                <p className="text-sm">Upload images to get started</p>
+                            </div>
+                        )}
+                    </div>
+                )}
+
+                {/* Gallery Images Grid */}
+                {activeTab === "gallery" && (
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                        <AnimatePresence>
+                            {galleryImages.map((image, index) => (
+                                <motion.div
+                                    key={image.id}
+                                    initial={{ opacity: 0, scale: 0.9 }}
+                                    animate={{ opacity: 1, scale: 1 }}
+                                    exit={{ opacity: 0, scale: 0.9 }}
+                                    className={`group relative bg-white/5 rounded-2xl overflow-hidden border border-white/10 hover:border-white/30 transition-all ${draggedItem === image.id ? "opacity-50" : ""
+                                        }`}
+                                >
+                                    {/* Drag Handle - only this part is draggable */}
+                                    <div
+                                        className="absolute top-2 left-2 z-20 cursor-grab active:cursor-grabbing"
+                                        draggable
+                                        onDragStart={() => handleDragStart(image.id)}
+                                        onDragOver={(e) => handleDragOver(e, image.id)}
+                                        onDragEnd={handleDragEnd}
+                                    >
+                                        <div className="bg-black/60 backdrop-blur-sm px-3 py-1 rounded-lg text-white text-sm font-medium flex items-center gap-1">
+                                            <GripVertical className="w-4 h-4" />
+                                            {index + 1}
+                                        </div>
+                                    </div>
+
+                                    <div className="aspect-video relative">
+                                        <Image
+                                            src={image.url}
+                                            alt={`Gallery ${index + 1}`}
+                                            fill
+                                            className="object-cover"
+                                        />
+                                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
+                                    </div>
+
+                                    {/* Delete Button - always visible with high z-index */}
+                                    <button
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            e.preventDefault();
+                                            handleGalleryDelete(image);
+                                        }}
+                                        className="absolute top-2 right-2 z-30 p-2 bg-red-500 hover:bg-red-600 text-white rounded-lg shadow-lg transition-all cursor-pointer"
+                                    >
+                                        <Trash2 className="w-4 h-4" />
+                                    </button>
+                                </motion.div>
+                            ))}
+                        </AnimatePresence>
+
+                        {galleryImages.length === 0 && (
+                            <div className="col-span-full flex flex-col items-center justify-center py-20 text-slate-500">
+                                <ImageIcon className="w-16 h-16 mb-4 opacity-50" />
+                                <p className="text-lg">No gallery images yet</p>
                                 <p className="text-sm">Upload images to get started</p>
                             </div>
                         )}

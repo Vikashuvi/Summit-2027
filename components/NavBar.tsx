@@ -28,7 +28,7 @@ const NavBar = () => {
     const navLinks = [
         { name: "About", href: "#about" },
         { name: "Past Speakers", href: "#speakers" },
-        { name: "Gallery", href: "#gallery" },
+        { name: "Gallery", href: "/gallery" },
         { name: "Tickets", href: "#tickets" },
     ];
 
@@ -67,18 +67,28 @@ const NavBar = () => {
                 </Link>
 
                 {/* Desktop Menu */}
-                {/* <div className="hidden md:flex items-center gap-8 bg-primary backdrop-blur-xl px-10 py-3 rounded-full border border-black/5 shadow-[0_8px_32px_rgba(0,0,0,0.05)]">
+                <div className="hidden md:flex items-center gap-8 bg-primary backdrop-blur-xl px-10 py-3 rounded-full border border-black/5 shadow-[0_8px_32px_rgba(0,0,0,0.05)]">
                     {navLinks.map((link) => (
-                        <a
-                            key={link.name}
-                            href={link.href}
-                            onClick={(e) => handleScroll(e, link.href)}
-                            className="text-white hover:text-white/80 font-semibold transition-colors text-[10px] uppercase tracking-[0.2em] cursor-pointer"
-                        >
-                            {link.name}
-                        </a>
+                        link.href.startsWith("#") ? (
+                            <a
+                                key={link.name}
+                                href={link.href}
+                                onClick={(e) => handleScroll(e, link.href)}
+                                className="text-white hover:text-white/80 font-semibold transition-colors text-[10px] uppercase tracking-[0.2em] cursor-pointer"
+                            >
+                                {link.name}
+                            </a>
+                        ) : (
+                            <Link
+                                key={link.name}
+                                href={link.href}
+                                className="text-white hover:text-white/80 font-semibold transition-colors text-[10px] uppercase tracking-[0.2em] cursor-pointer"
+                            >
+                                {link.name}
+                            </Link>
+                        )
                     ))}
-                </div> */}
+                </div>
 
                 {/* CTA Button */}
                 <div className="flex items-center">
